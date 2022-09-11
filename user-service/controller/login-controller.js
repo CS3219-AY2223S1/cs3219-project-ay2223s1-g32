@@ -6,7 +6,7 @@ export async function loginUser(req, res) {
     const isSuccess = await isValidLogin(username, password);
     console.log("isSuccess:" + isSuccess)
     if (!isSuccess) {
-      return res.status(400).json({message: 'Invalid username or password'});
+      return res.status(400).json({message: 'Incorrect username or password'});
     }
 
     const token = await getUserToken(username);

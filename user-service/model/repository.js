@@ -17,6 +17,10 @@ export async function createUser(params) {
   return new UserModel(params);
 }
 
+export async function updateUser(id, params) {
+  await UserModel.findByIdAndUpdate(id, params, { new: true })
+}
+
 export async function getUser(username) {
   const existingUser = await UserModel.findOne({ username: username });
   return existingUser;
