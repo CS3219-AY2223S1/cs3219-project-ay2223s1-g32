@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { createUser } from './controller/user-controller.js';
+import { createUser, updateUserPassword } from './controller/user-controller.js';
 import { loginUser } from './controller/login-controller.js';
 
 const app = express();
@@ -16,6 +16,7 @@ const loginRouter = express.Router()
 // UserRouter
 userRouter.get('/', (_, res) => res.send('Hello World from user-service'))
 userRouter.post('/', createUser)
+userRouter.put('/', updateUserPassword)
 
 // LoginRouter
 loginRouter.post('/', loginUser)
