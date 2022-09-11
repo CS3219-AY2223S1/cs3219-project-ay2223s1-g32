@@ -18,7 +18,11 @@ export async function createUser(params) {
 }
 
 export async function updateUser(id, params) {
-  return await UserModel.findByIdAndUpdate(id, params, { new: true });
+  await UserModel.findByIdAndUpdate(id, params, { new: true });
+}
+
+export async function deleteUser(id) {
+  await UserModel.findByIdAndRemove(id);
 }
 
 export async function getUser(username) {

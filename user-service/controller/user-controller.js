@@ -1,12 +1,12 @@
 import { getUser, isValidLogin } from '../model/repository.js';
-import { ormCreateUser as _createUser, ormUpdateUserPassword as _updateUserPassword } from '../model/user-orm.js'
+import { ormCreateUser as _createUser, ormUpdateUserPassword as _updateUserPassword, ormDeleteUser as _deleteUser } from '../model/user-orm.js'
 
 export async function createUser(req, res) {
     try {
         const { username, password } = req.body;
         if (username && password) {
             const resp = await _createUser(username, password);
-            console.log(resp);
+
             if (resp.err) {
                 return res.status(400).json({message: 'Could not create a new user: ' + resp.err});
             } else {
@@ -36,12 +36,12 @@ export async function updateUserPassword(req, res) {
     }
 
     const resp = await _updateUserPassword(existingUser._id, username, newPassword);
-    console.log(resp);
+
     if (resp.err) {
         return res.status(400).json({message: 'Could not change user password: ' + resp.err});
     } else {
-        console.log(`Password changed for ${username} successfully!`)
-        return res.status(201).json({message: `Password changed for ${username} successfully!`});
+      console.log(`Password changed for ${username} successfully!`)
+      return res.status(200).json({message: `Password changed for ${username} successfully!`});
     }
 
   } catch (error) {
@@ -49,3 +49,32 @@ export async function updateUserPassword(req, res) {
     return res.status(500).json({message: 'Database failure when changing password!'});
   }
 } 
+
+export async function deleteUser(req, res) {
+  try {
+    const { username, password } = req.body;
+    
+    const existingUser = await getUser(username);
+    if (!existingUser) {
+      return res.status(404).json({message: `User does not exist: ${username}`});
+    }
+
+    const isLoginSuccess = await isValidLogin(username, password);
+    if (!isLoginSuccess) {
+      return res.status(400).json({message: 'Incorrect username or password'});
+    }
+
+    const resp = await _deleteUser(existingUser._id);
+
+    if (resp.err) {
+      return res.status(400).json({message: 'Could not delete user: ' + resp.err});
+    } else {
+      console.log(`User ${username} deleted successfully!`)
+      return res.status(204).json({message: `User ${username} deleted successfully!`});
+    }
+
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({message: 'Database failure when deleting user!'})
+  }
+}

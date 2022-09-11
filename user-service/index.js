@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { createUser, updateUserPassword } from './controller/user-controller.js';
+import { createUser, deleteUser, updateUserPassword } from './controller/user-controller.js';
 import { loginUser } from './controller/login-controller.js';
 
 const app = express();
@@ -14,9 +14,11 @@ const loginRouter = express.Router()
 
 // Controller will contain all the User-defined Routes
 // UserRouter
-userRouter.get('/', (_, res) => res.send('Hello World from user-service'))
-userRouter.post('/', createUser)
-userRouter.put('/', updateUserPassword)
+userRouter
+  .get('/', (_, res) => res.send('Hello World from user-service'))
+  .post('/', createUser)
+  .put('/', updateUserPassword)
+  .delete('/', deleteUser);
 
 // LoginRouter
 loginRouter.post('/', loginUser)
