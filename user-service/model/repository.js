@@ -22,6 +22,11 @@ export async function isExistingUser(username) {
   return !!existingUser;
 }
 
+export async function getHashedPassword(password) {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+}
+
 export async function isValidLogin(username, password) {
   const user = await UserModel.findOne({ username: username });
   const isValidLogin = !user
