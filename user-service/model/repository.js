@@ -17,9 +17,9 @@ export async function createUser(params) {
   return new UserModel(params);
 }
 
-export async function isExistingUser(username) {
+export async function getUser(username) {
   const existingUser = await UserModel.findOne({ username: username });
-  return !!existingUser;
+  return existingUser;
 }
 
 export async function getHashedPassword(password) {
