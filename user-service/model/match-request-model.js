@@ -11,6 +11,10 @@ let MatchRequestModelSchema = new Schema({
     type: String,
     required: true,
   },
+  socketId: {
+    type: String,
+    required: true,
+  },
   matched: {
     type: Boolean,
     required: true,

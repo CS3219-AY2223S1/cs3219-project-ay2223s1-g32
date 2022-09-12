@@ -1,11 +1,12 @@
 import { createMatchRequest } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
-export async function ormCreateMatchRequest(username, difficulty) {
+export async function ormCreateMatchRequest(username, difficulty, socketId) {
   try {
     const newMatchRequest = await createMatchRequest({
       username: username,
       difficulty: difficulty,
+      socketId: socketId,
       matched: false,
     });
     newMatchRequest.save();

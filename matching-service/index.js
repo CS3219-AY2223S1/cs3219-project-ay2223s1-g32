@@ -3,6 +3,11 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { ormCreateMatchRequest } from "../user-service/model/match-request-model-orm.js";
+import {
+  deleteMatch,
+  getMatchUsername,
+  getMatchDifficulty,
+} from "../user-service/model/repository.js";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -23,8 +28,27 @@ httpServer.listen(8001, () => {
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("match", (args) => {
-    console.log(args);
-    ormCreateMatchRequest(args["username"], args["difficulty"]);
+  socket.on("match", async (args) => {
+    const username = args["username"];
+    const difficulty = args["difficulty"];
+
+    const [matchedUser, userInQueue] = await Promise.all([
+      getMatchDifficulty(difficulty),
+      getMatchUsername(username),
+    ]);
+
+    if (!userInQueue && matchedUser) {
+      deleteMatch(matchedUser);
+      socket.emit("Success", "Match with same difficulty found.");
+      io.to(matchedUser["socketId"]).emit(
+        "Success",
+        "Match with same difficulty found."
+      );
+    } else if (!userInQueue) {
+      ormCreateMatchRequest(username, difficulty, socket.id);
+      socket.emit("Success", "User added to matching queue");
+    } else {
+      socket.emit("Error", "User already in being matched.");
+    }
   });
 });
