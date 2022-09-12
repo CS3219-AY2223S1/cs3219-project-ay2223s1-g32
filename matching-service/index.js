@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { ormCreateMatchRequest } from "../user-service/model/match-request-model-orm.js";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -21,4 +22,8 @@ httpServer.listen(8001, () => {
 
 io.on("connection", (socket) => {
   console.log("a user connected");
+
+  socket.on("match", (username, difficulty) => {
+    ormCreateMatchRequest(username, difficulty);
+  });
 });

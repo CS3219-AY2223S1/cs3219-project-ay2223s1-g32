@@ -1,6 +1,6 @@
 import UserModel from "./user-model.js";
 import "dotenv/config";
-
+import MatchRequestModel from "./match-request-model.js";
 //Set up mongoose connection
 import mongoose from "mongoose";
 
