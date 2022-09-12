@@ -27,7 +27,6 @@ httpServer.listen(8001, () => {
 
 io.on("connection", (socket) => {
   console.log("a user connected");
-
   socket.on("match", async (args) => {
     const username = args["username"];
     const difficulty = args["difficulty"];

@@ -6,10 +6,25 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
 
+const socket = io("http://localhost:8001/", {
+  autoConnect: false,
+});
+
+socket.on("connect", () => {
+  console.log("Server successfully connected"); // false
+});
+
+socket.on("Success", (response) => {
+  console.log(response); // false
+});
+
+socket.on("Error", (response) => {
+  console.log(response); // false
+});
+
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
   const timerRef = React.useRef();
-  const socket = io();
 
   React.useEffect(
     () => () => {
@@ -32,9 +47,10 @@ export default function MatchingPage() {
       difficulty: "easy",
     };
     setQuery("progress");
-    console.log("msg emitted");
+    socket.connect();
     socket.emit("match", message, (response) => {
-      console.log(response.status);
+      console.log("msg emitted");
+      console.log(response);
     });
 
     timerRef.current = window.setTimeout(() => {
