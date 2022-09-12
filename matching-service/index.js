@@ -8,6 +8,7 @@ import {
   getMatchUsername,
   getMatchDifficulty,
 } from "../user-service/model/repository.js";
+import { setTimeout } from "timers";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -46,6 +47,13 @@ io.on("connection", (socket) => {
     } else if (!userInQueue) {
       ormCreateMatchRequest(username, difficulty, socket.id);
       socket.emit("Success", "User added to matching queue");
+      setTimeout(async () => {
+        const userStillInQueue = await getMatchUsername(username);
+        if (userStillInQueue) {
+          await deleteMatch(userStillInQueue);
+          socket.emit("TimeoutError", "Match not found in 30s");
+        }
+      }, 30000);
     } else {
       socket.emit("Error", "User already in being matched.");
     }

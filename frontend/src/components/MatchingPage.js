@@ -22,6 +22,10 @@ socket.on("Error", (response) => {
   console.log(response); // false
 });
 
+socket.on("TimeoutError", (response) => {
+  console.log(response); // false
+});
+
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
   const timerRef = React.useRef();
