@@ -23,7 +23,8 @@ httpServer.listen(8001, () => {
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("match", (username, difficulty) => {
-    ormCreateMatchRequest(username, difficulty);
+  socket.on("match", (args) => {
+    console.log(args);
+    ormCreateMatchRequest(args["username"], args["difficulty"]);
   });
 });

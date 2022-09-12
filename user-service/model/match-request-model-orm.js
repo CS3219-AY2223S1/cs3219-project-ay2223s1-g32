@@ -4,9 +4,9 @@ import { createMatchRequest } from "./repository.js";
 export async function ormCreateMatchRequest(username, difficulty) {
   try {
     const newMatchRequest = await createMatchRequest({
-      username,
-      difficulty,
-      False,
+      username: username,
+      difficulty: difficulty,
+      matched: false,
     });
     newMatchRequest.save();
     return true;
