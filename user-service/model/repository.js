@@ -75,7 +75,9 @@ export async function getTokenUser(token) {
       ? jsonwebtoken.verify(token, process.env.SECRET)
       : null;
   
-    const user = decodedToken 
+    const isBlacklistedToken = await getBlacklistedToken(token);
+
+    const user = decodedToken && !isBlacklistedToken
       ? await UserModel.findById(decodedToken.id)
       : null;
     

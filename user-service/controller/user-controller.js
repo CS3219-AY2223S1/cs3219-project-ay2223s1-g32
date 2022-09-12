@@ -7,8 +7,8 @@ export async function createUser(req, res) {
         if (username && password) {
             const resp = await _createUser(username, password);
 
-            if (resp.err) {
-                return res.status(400).json({message: 'Could not create a new user: ' + resp.err});
+            if (resp.error) {
+                return res.status(400).json({message: 'Could not create a new user: ' + resp.error});
             } else {
                 console.log(`Created new user ${username} successfully!`)
                 return res.status(201).json({message: `Created new user ${username} successfully!`});
@@ -33,8 +33,8 @@ export async function updateUserPassword(req, res) {
 
     const resp = await _updateUserPassword(user._id, username, newPassword);
 
-    if (resp.err) {
-        return res.status(400).json({message: 'Could not change user password: ' + resp.err});
+    if (resp.error) {
+        return res.status(400).json({message: 'Could not change user password: ' + resp.error});
     } else {
       console.log(`Password changed for ${username} successfully!`)
       return res.status(200).json({message: `Password changed for ${username} successfully!`});
@@ -58,8 +58,8 @@ export async function deleteUser(req, res) {
 
     const resp = await _deleteUser(user._id);
 
-    if (resp.err) {
-      return res.status(400).json({message: 'Could not delete user: ' + resp.err});
+    if (resp.error) {
+      return res.status(400).json({message: 'Could not delete user: ' + resp.error});
     } else {
       console.log(`User ${username} deleted successfully!`)
       return res.status(204).json({message: `User ${username} deleted successfully!`});
