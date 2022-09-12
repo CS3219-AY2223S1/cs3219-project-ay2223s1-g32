@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 import SignupPage from "./components/SignupPage";
 import { Box } from "@mui/material";
-import SelectDifficultyPage from "./components/SelectDifficultyPage";
+import SelectDifficultyPage from "./components/SignupPage";
+import MatchingPage from "./components/MatchingPage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               path="/selectdifficulty"
               element={<SelectDifficultyPage />}
             />
+            <Route path="/matching" element={<MatchingPage />} />
           </Routes>
         </Router>
       </Box>
