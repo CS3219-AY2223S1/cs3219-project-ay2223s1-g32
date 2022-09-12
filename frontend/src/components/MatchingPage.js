@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
+import { Link } from "react-router-dom";
 
 const socket = io("http://localhost:8001/", {
   autoConnect: false,
@@ -84,6 +85,11 @@ export default function MatchingPage() {
       <Button onClick={handleClickQuery} sx={{ m: 2 }}>
         {query !== "idle" ? "Stop Matching" : "Start Matching"}
       </Button>
+      <Box sx={{ height: 40 }}>
+        <Link to="/">
+          <Button variant="outlined">Go Home</Button>
+        </Link>
+      </Box>
     </Box>
   );
 }
