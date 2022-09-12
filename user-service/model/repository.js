@@ -1,4 +1,5 @@
 import UserModel from './user-model.js';
+import BlacklistedTokenModel from './blacklisted-token-model.js';
 import 'dotenv/config'
 import * as bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
@@ -42,6 +43,15 @@ export async function isValidLogin(username, password) {
     : await bcrypt.compare(password, user.passwordHash);
 
   return isValidLogin;
+}
+
+export async function createBlacklistedToken(params) { 
+  return new BlacklistedTokenModel(params);
+}
+
+export async function getBlacklistedToken(token) {
+  const blacklistedToken = await BlacklistedTokenModel.findOne({ token: token });
+  return blacklistedToken;
 }
 
 export async function getUserToken(username) {
