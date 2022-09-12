@@ -1,4 +1,4 @@
-import { getUser, isValidLogin } from '../model/repository.js';
+import { getRequestToken, getTokenUser, getUser, isValidLogin } from '../model/repository.js';
 import { ormCreateUser as _createUser, ormUpdateUserPassword as _updateUserPassword, ormDeleteUser as _deleteUser } from '../model/user-orm.js'
 
 export async function createUser(req, res) {
@@ -23,19 +23,15 @@ export async function createUser(req, res) {
 
 export async function updateUserPassword(req, res) {
   try {
-    const { username, oldPassword, newPassword } = req.body;
+    const { username, newPassword } = req.body;
     
-    const existingUser = await getUser(username);
-    if (!existingUser) {
-      return res.status(404).json({message: `User does not exist: ${username}`});
+    const token = getRequestToken(req);
+    const user = await getTokenUser(token);
+    if (!user) {
+      return res.status(400).json({message: `Invalid authorization token`});
     }
 
-    const isLoginSuccess = await isValidLogin(username, oldPassword);
-    if (!isLoginSuccess) {
-      return res.status(400).json({message: 'Incorrect username or old password'});
-    }
-
-    const resp = await _updateUserPassword(existingUser._id, username, newPassword);
+    const resp = await _updateUserPassword(user._id, username, newPassword);
 
     if (resp.err) {
         return res.status(400).json({message: 'Could not change user password: ' + resp.err});
@@ -52,19 +48,15 @@ export async function updateUserPassword(req, res) {
 
 export async function deleteUser(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username } = req.body;
     
-    const existingUser = await getUser(username);
-    if (!existingUser) {
-      return res.status(404).json({message: `User does not exist: ${username}`});
+    const token = getRequestToken(req);
+    const user = await getTokenUser(token);
+    if (!user) {
+      return res.status(400).json({message: `Invalid authorization token`});
     }
 
-    const isLoginSuccess = await isValidLogin(username, password);
-    if (!isLoginSuccess) {
-      return res.status(400).json({message: 'Incorrect username or password'});
-    }
-
-    const resp = await _deleteUser(existingUser._id);
+    const resp = await _deleteUser(user._id);
 
     if (resp.err) {
       return res.status(400).json({message: 'Could not delete user: ' + resp.err});
