@@ -45,6 +45,33 @@ export async function isValidLogin(username, password) {
 }
 
 export async function getUserToken(username) {
-  const token = jsonwebtoken.sign({ username }, process.env.SECRET);
+  const user = await getUser(username);
+  const token = jsonwebtoken.sign({ username: username, id: user.id }, process.env.SECRET);
   return token;
+}
+
+export function getRequestToken(request) {
+  const auth = request.get('authorization');
+  const bearer = 'bearer ';
+
+  return auth && auth.toLowerCase().startsWith(bearer)
+    ? auth.substring(bearer.length)
+    : null;
+}
+
+export async function getTokenUser(token) {
+  try {
+    const decodedToken = token
+      ? jsonwebtoken.verify(token, process.env.SECRET)
+      : null;
+  
+    const user = decodedToken 
+      ? await UserModel.findById(decodedToken.id)
+      : null;
+    
+    return user;
+    
+  } catch (error) {
+    return null;
+  }
 }
