@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import SignupPage from "./components/SignupPage";
 import { Box } from "@mui/material";
-import SelectDifficultyPage from "./components/SignupPage";
+import SelectDifficultyPage from "./components/SelectDifficultyPage";
 import MatchingPage from "./components/MatchingPage";
 
 function App() {
