@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import {useState} from "react";
 import axios from "axios";
-import {LOGIN_USER_SVC} from "../configs";
-import {STATUS_CODE_FAILED, STATUS_CODE_CREATED} from "../constants";
+import {LOGIN_USER_SVC, URL_USER_AUTH} from "../configs";
+import {STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN} from "../constants";
 import {useNavigate} from "react-router-dom";
 
 function LoginPage() {
@@ -26,6 +26,13 @@ function LoginPage() {
 
     const redirect = useNavigate() // re-direct api
 
+    const [jwt, setJwt] = useState('');
+
+    const getJwt = async () => {
+        const { data } = await axios.get(URL_USER_AUTH, { username })
+        setJwt(data.token);
+      }
+
     const handleLogin = async () => {
         const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .catch((err) => {
@@ -35,7 +42,7 @@ function LoginPage() {
                     setErrorDialog('Please try again later')
                 }
             })
-        if (res && res.status === STATUS_CODE_CREATED) {
+        if (res && res.status === STATUS_CODE_LOGGEDIN) {
             setSuccessDialog('Successfully logged in, redirecting you to the home page..')
             setIsLoginSuccess(true)
         }
@@ -46,12 +53,17 @@ function LoginPage() {
         redirect("/signup");
     }
 
+    const navToMainPage = async () => {
+        redirect("/homepage");
+    }
+
     const closeDialog = () => setIsDialogOpen(false)
 
     const setSuccessDialog = (msg) => {
         setIsDialogOpen(true)
         setDialogTitle('Success')
-        setDialogMsg(msg)    }
+        setDialogMsg(msg)    
+    }
 
     const setErrorDialog = (msg) => {
         setIsDialogOpen(true)
@@ -87,6 +99,12 @@ function LoginPage() {
             onClick={handleSignUpNav}>
                 {'No existing account? Sign up here.'}
             </Link>
+            <button onClick={() => getJwt()}>Get JWT</button>
+        {jwt && (
+          <pre>
+            <code>{jwt}</code>
+          </pre>
+        )}
             <Dialog
                 open={isDialogOpen}
                 onClose={closeDialog}
@@ -97,7 +115,7 @@ function LoginPage() {
                 </DialogContent>
                 <DialogActions>
                     {isLoginSuccess
-                        ? <Button component={Link} to="/homepage">Go to homepage</Button>
+                        ? <Button onClick={navToMainPage}>Go to homepage</Button>
                         : <Button onClick={closeDialog}>Close</Button>
                     }
                 </DialogActions>
