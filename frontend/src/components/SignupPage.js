@@ -10,7 +10,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {useState} from "react";
+import { useState } from "react";
 import axios from "axios";
 import {URL_USER_SVC} from "../configs";
 import {STATUS_CODE_FAILED, STATUS_CODE_CREATED} from "../constants";
@@ -39,7 +39,12 @@ function SignupPage() {
             setSuccessDialog('Account successfully created')
             setIsSignupSuccess(true)
         }
+
+    if (res && res.status === STATUS_CODE_CREATED) {
+      setSuccessDialog("Account successfully created");
+      setIsSignupSuccess(true);
     }
+  };
 
     const handleLoginNav = async () => {
         redirect("/login");
@@ -47,17 +52,17 @@ function SignupPage() {
 
     const closeDialog = () => setIsDialogOpen(false)
 
-    const setSuccessDialog = (msg) => {
-        setIsDialogOpen(true)
-        setDialogTitle('Success')
-        setDialogMsg(msg)
-    }
+  const setSuccessDialog = (msg) => {
+    setIsDialogOpen(true);
+    setDialogTitle("Success");
+    setDialogMsg(msg);
+  };
 
-    const setErrorDialog = (msg) => {
-        setIsDialogOpen(true)
-        setDialogTitle('Error')
-        setDialogMsg(msg)
-    }
+  const setErrorDialog = (msg) => {
+    setIsDialogOpen(true);
+    setDialogTitle("Error");
+    setDialogMsg(msg);
+  };
 
     return (
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
