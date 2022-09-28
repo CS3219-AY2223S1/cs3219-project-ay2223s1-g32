@@ -1,42 +1,49 @@
 import {
     Box,
     Button,
+    Link,
+    TextField,
+    Typography,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField,
-    Typography
 } from "@mui/material";
 import {useState} from "react";
 import axios from "axios";
-import {URL_USER_SVC} from "../configs";
+import {LOGIN_USER_SVC} from "../configs";
 import {STATUS_CODE_FAILED, STATUS_CODE_CREATED} from "../constants";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
-function SignupPage() {
+function LoginPage() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
-    const [isSignupSuccess, setIsSignupSuccess] = useState(false)
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false)
 
-    const handleSignup = async () => {
-        setIsSignupSuccess(false)
-        const res = await axios.post(URL_USER_SVC, { username, password })
+    const redirect = useNavigate() // re-direct api
+
+    const handleLogin = async () => {
+        const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_FAILED) {
-                    setErrorDialog(err.response.data.message)
+                    setErrorDialog(err.response.data.message);
                 } else {
                     setErrorDialog('Please try again later')
                 }
             })
         if (res && res.status === STATUS_CODE_CREATED) {
-            setSuccessDialog('Account successfully created')
-            setIsSignupSuccess(true)
+            setSuccessDialog('Successfully logged in, redirecting you to the home page..')
+            setIsLoginSuccess(true)
         }
+    }
+
+
+    const handleSignUpNav = async () => {
+        redirect("/signup");
     }
 
     const closeDialog = () => setIsDialogOpen(false)
@@ -44,8 +51,7 @@ function SignupPage() {
     const setSuccessDialog = (msg) => {
         setIsDialogOpen(true)
         setDialogTitle('Success')
-        setDialogMsg(msg)
-    }
+        setDialogMsg(msg)    }
 
     const setErrorDialog = (msg) => {
         setIsDialogOpen(true)
@@ -55,7 +61,7 @@ function SignupPage() {
 
     return (
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
+            <Typography variant={"h3"} marginBottom={"2rem"}>Log In</Typography>
             <TextField
                 label="Username"
                 variant="standard"
@@ -72,10 +78,15 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{marginBottom: "2rem"}}
             />
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}> 
+                <Button variant={"outlined"} onClick={handleLogin}>Log In</Button>
             </Box>
-
+            <Link underline="hover" justifyContent={"flex-start"} 
+            sx={{marginTop: "-2.2rem"}}
+            alignSelf={"flex-start"}
+            onClick={handleSignUpNav}>
+                {'No existing account? Sign up here.'}
+            </Link>
             <Dialog
                 open={isDialogOpen}
                 onClose={closeDialog}
@@ -85,9 +96,9 @@ function SignupPage() {
                     <DialogContentText>{dialogMsg}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    {isSignupSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
-                        : <Button onClick={closeDialog}>Done</Button>
+                    {isLoginSuccess
+                        ? <Button component={Link} to="/homepage">Go to homepage</Button>
+                        : <Button onClick={closeDialog}>Close</Button>
                     }
                 </DialogActions>
             </Dialog>
@@ -95,4 +106,4 @@ function SignupPage() {
     )
 }
 
-export default SignupPage;
+export default LoginPage;
