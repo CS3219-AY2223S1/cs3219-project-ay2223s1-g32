@@ -8,8 +8,15 @@ import { authUser } from './controller/user-auth-cookie-controller.js';
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cookieParser());
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
+app.use((
+  jwt({
+    secret: PROCESS.env.SECRET,
+    getToken: req => req.cookies.token
+  })
+));
 
 const userRouter = express.Router()
 const jwtCookieRouter = express.Router()
