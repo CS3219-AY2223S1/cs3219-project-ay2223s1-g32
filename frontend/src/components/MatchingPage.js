@@ -86,8 +86,8 @@ export default function MatchingPage() {
         {query !== "idle" ? "Stop Matching" : "Start Matching"}
       </Button>
       <Box sx={{ height: 40 }}>
-        <Link to="/">
-          <Button variant="outlined">Go Home</Button>
+        <Link to="/selectdifficulty">
+          <Button variant="outlined">Go Back</Button>
         </Link>
       </Box>
     </Box>

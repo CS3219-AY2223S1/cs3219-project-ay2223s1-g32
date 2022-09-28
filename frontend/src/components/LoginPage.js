@@ -26,13 +26,6 @@ function LoginPage() {
 
     const redirect = useNavigate() // re-direct api
 
-    const [jwt, setJwt] = useState('');
-
-    const getJwt = async () => {
-        const { data } = await axios.get(URL_USER_AUTH, { username })
-        setJwt(data.token);
-      }
-
     const handleLogin = async () => {
         const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .catch((err) => {
@@ -43,8 +36,8 @@ function LoginPage() {
                 }
             })
         if (res && res.status === STATUS_CODE_LOGGEDIN) {
-            setSuccessDialog('Successfully logged in, redirecting you to the home page..')
             setIsLoginSuccess(true)
+            redirect("/selectdifficulty");
         }
     }
 
@@ -53,17 +46,7 @@ function LoginPage() {
         redirect("/signup");
     }
 
-    const navToMainPage = async () => {
-        redirect("/homepage");
-    }
-
     const closeDialog = () => setIsDialogOpen(false)
-
-    const setSuccessDialog = (msg) => {
-        setIsDialogOpen(true)
-        setDialogTitle('Success')
-        setDialogMsg(msg)    
-    }
 
     const setErrorDialog = (msg) => {
         setIsDialogOpen(true)
@@ -99,12 +82,6 @@ function LoginPage() {
             onClick={handleSignUpNav}>
                 {'No existing account? Sign up here.'}
             </Link>
-            <button onClick={() => getJwt()}>Get JWT</button>
-        {jwt && (
-          <pre>
-            <code>{jwt}</code>
-          </pre>
-        )}
             <Dialog
                 open={isDialogOpen}
                 onClose={closeDialog}
@@ -114,9 +91,8 @@ function LoginPage() {
                     <DialogContentText>{dialogMsg}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    {isLoginSuccess
-                        ? <Button onClick={navToMainPage}>Go to homepage</Button>
-                        : <Button onClick={closeDialog}>Close</Button>
+                    {!isLoginSuccess
+                        ? <Button onClick={closeDialog}>Close</Button> : <></>
                     }
                 </DialogActions>
             </Dialog>
