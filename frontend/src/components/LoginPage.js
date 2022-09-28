@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import {useState} from "react";
 import axios from "axios";
-import {LOGIN_USER_SVC, URL_USER_AUTH} from "../configs";
+import {LOGIN_USER_SVC} from "../configs";
 import {STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN} from "../constants";
 import {useNavigate} from "react-router-dom";
 
