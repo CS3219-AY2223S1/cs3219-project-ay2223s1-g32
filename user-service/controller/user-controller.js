@@ -11,7 +11,7 @@ export async function createUser(req, res) {
                 return res.status(400).json({message: 'Could not create a new user: ' + resp.error});
             } else {
                 console.log(`Created new user ${username} successfully!`)
-                return res.status(201).json({message: `Created new user ${username} successfully!`});
+                return res.status(200).json({message: `Created new user ${username} successfully!`});
             }
         } else {
             return res.status(400).json({message: 'Username and/or Password are missing!'});
@@ -64,7 +64,6 @@ export async function deleteUser(req, res) {
       console.log(`User ${username} deleted successfully!`)
       return res.status(204).json({message: `User ${username} deleted successfully!`});
     }
-
   } catch (err) {
     console.log(err)
     return res.status(500).json({message: 'Database failure when deleting user!'})

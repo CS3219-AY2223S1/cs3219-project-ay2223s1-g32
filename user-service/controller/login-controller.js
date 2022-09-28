@@ -11,8 +11,8 @@ export async function loginUser(req, res) {
 
     const token = await getUserToken(username);
     console.log("token:" + token)
-    return res.status(200).send({ username, token });
-
+    res.cookie('token', token, { httpOnly: true });
+    return res.status(200).json({ username, token });
   } catch (error) {
     console.log(error)
     return res.status(500).json({message: 'Server failure when attempting login!'})

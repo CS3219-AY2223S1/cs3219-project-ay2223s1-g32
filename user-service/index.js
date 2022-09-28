@@ -3,6 +3,7 @@ import cors from 'cors';
 import { createUser, deleteUser, updateUserPassword } from './controller/user-controller.js';
 import { loginUser } from './controller/login-controller.js';
 import { logoutUser } from './controller/logout-controller.js';
+import { authUser } from './controller/user-auth-cookie-controller.js';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -11,6 +12,7 @@ app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
 
 const userRouter = express.Router()
+const jwtCookieRouter = express.Router()
 const loginRouter = express.Router()
 const logoutRouter = express.Router()
 
@@ -22,6 +24,9 @@ userRouter
   .put('/', updateUserPassword)
   .delete('/', deleteUser);
 
+// JWTCookieRouter
+jwtCookieRouter.post('/', authUser)
+
 // LoginRouter
 loginRouter.post('/', loginUser)
 
@@ -31,6 +36,11 @@ logoutRouter.post('/', logoutUser)
 app.use('/api/user', userRouter).all((_, res) => {
     res.setHeader('content-type', 'application/json')
     res.setHeader('Access-Control-Allow-Origin', '*')
+})
+
+app.use('/api/auth', jwtCookieRouter).all((_, res) => {
+  res.setHeader('content-type', 'application/json')
+  res.setHeader('Access-Control-Allow-Origin', '*')
 })
 
 app.use('/api/login', loginRouter).all((_, res) => {
