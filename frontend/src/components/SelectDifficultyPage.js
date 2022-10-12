@@ -17,12 +17,13 @@ export default function BasicSelect() {
   };
 
   const confirmButton = () => {
-    navigate("/matching");
+    console.log("selected difficulty: " + difficulty);
+    navigate("/matching", { state : { difficulty: difficulty }});
   }
 
   return (
     <>
-    <text style={{marginBottom: 20, fontSize: 28}}>Select your difficulty: </text>
+    <h1 style={{marginBottom: 20, fontSize: 28}}>Select your difficulty: </h1>
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>

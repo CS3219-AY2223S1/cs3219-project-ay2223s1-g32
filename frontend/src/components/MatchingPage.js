@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const socket = io("http://localhost:8001/", {
   autoConnect: false,
@@ -30,6 +30,9 @@ socket.on("TimeoutError", (response) => {
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
   const timerRef = React.useRef();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const difficulty = location.state.difficulty;
 
   React.useEffect(
     () => () => {
@@ -48,8 +51,8 @@ export default function MatchingPage() {
       return;
     }
     var message = {
-      username: "easy_user2",
-      difficulty: "easy",
+      username: "user1",
+      difficulty: difficulty,
     };
     setQuery("progress");
     socket.connect();
@@ -60,6 +63,7 @@ export default function MatchingPage() {
 
     timerRef.current = window.setTimeout(() => {
       setQuery("success");
+      navigate("/matched", { state : { difficulty: difficulty }});
     }, 30000);
   };
 
@@ -85,11 +89,18 @@ export default function MatchingPage() {
       <Button onClick={handleClickQuery} sx={{ m: 2 }}>
         {query !== "idle" ? "Stop Matching" : "Start Matching"}
       </Button>
-      <Box sx={{ height: 40 }}>
-        <Link to="/">
-          <Button variant="outlined">Go Home</Button>
-        </Link>
-      </Box>
+      <div>
+        <Box sx={{ height: 40 }}>
+          <Link to="/">
+            <Button variant="outlined">Go Home</Button>
+          </Link>
+        </Box>
+        <Box sx={{ height: 40 }}>
+          <Link to="/selectdifficulty">
+            <Button variant="outlined">Change difficulty</Button>
+          </Link>
+        </Box>
+      </div>
     </Box>
   );
 }

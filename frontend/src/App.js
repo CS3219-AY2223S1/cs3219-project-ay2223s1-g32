@@ -8,6 +8,7 @@ import SignupPage from "./components/SignupPage";
 import { Box } from "@mui/material";
 import SelectDifficultyPage from "./components/SelectDifficultyPage";
 import MatchingPage from "./components/MatchingPage";
+import MatchedPage from "./components/MatchedPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               element={<SelectDifficultyPage />}
             />
             <Route path="/matching" element={<MatchingPage />} />
+            <Route path="/matched" element={<MatchedPage />} />
           </Routes>
         </Router>
       </Box>
