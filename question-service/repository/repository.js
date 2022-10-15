@@ -20,21 +20,28 @@ const getQuestion = async (id) => {
 }
 
 const getRandomQuestion = async (prevId, difficulty, topic) => { 
+  // set conditions
   let conditions = {}
-
+  
   if (prevId) {
     conditions["_id"] = { "$ne": prevId }
   }
-
+  
   if (difficulty) {
     conditions["difficulty"] = difficulty
   }
-
+  
   if (topic) {
     conditions["topics"] = topic
   }
+
+  // get filtered questions
+  const questions = await Question.find(conditions).exec()
+
+  // get random question
+  const random = Math.floor(Math.random() * questions.length) 
+  const question = questions[random]
   
-  const question = await Question.findOne(conditions).exec()
   return question
 }
 
