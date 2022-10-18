@@ -19,7 +19,7 @@ Returns the question specified by `id` in the request body.
 Body:
 | Key | Description |
 |-----|-------|
-id    |ID of the question of interest.|
+id    |ID of the question of interest|
 
 ### Get specified question: `GET /api/question/random`
 Returns a random question. Returned question can be further specified by optional values in the request body.
