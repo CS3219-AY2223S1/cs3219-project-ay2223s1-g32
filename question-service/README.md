@@ -29,4 +29,4 @@ Body:
 |-----|-------|
 prevId    |ID of the previous question, provide to not return the same question in the subsequent call|
 difficulty | Difficulty level of the returned question. Supported values: `[0, 1, 2]`
-topic | Topic of interest of the returned question. Supported values: `["string", "array"]`
+topic | Topic of interest of the returned question. Supported values: `["array"]`
