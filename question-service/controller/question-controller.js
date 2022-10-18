@@ -1,37 +1,41 @@
 const QuestionRepository = require('../repository/repository')
 
-const getAllQuestions = async (req, res) => {
+const getAllQuestions = async (req, res, next) => {
   try {
     const questions = await QuestionRepository.getAllQuestions()
     return res.status(200).json(questions);
 
   } catch (error) {
     console.log(error)
-    return res.status(400).json({message: 'Database failure when getting questions!'})
+    next(error)
   }  
 }
 
-const getQuestion = async (req, res) => {
+const getQuestion = async (req, res, next) => {
   try {
     const { id } = req.body
     const question = await QuestionRepository.getQuestion(id)
-    return res.status(200).json(question);
+    return question
+      ? res.status(200).json(question)
+      : res.status(404).json({message: "Question not found."});
 
   } catch (error) {
     console.log(error)
-    return res.status(400).json({message: 'Database failure when getting question!'})
+    next(error)
   }  
 }
 
-const getRandomQuestion = async (req, res) => {
+const getRandomQuestion = async (req, res, next) => {
   try {
     const { prevId, difficulty, topic } = req.body
     const question = await QuestionRepository.getRandomQuestion(prevId, difficulty, topic)
-    return res.status(200).json(question);
+    return question
+      ? res.status(200).json(question)
+      : res.status(404).json({message: "Question not found."});
 
   } catch (error) {
     console.log(error)
-    return res.status(400).json({message: 'Database failure when getting question!'})
+    next(error)
   }  
 }
 
