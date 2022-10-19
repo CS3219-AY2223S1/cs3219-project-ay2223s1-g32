@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import SelectDifficultyPage from "./components/SelectDifficultyPage";
 import MatchingPage from "./components/MatchingPage";
 import MatchedPage from "./components/MatchedPage";
+import Collab from "./components/Tpage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             />
             <Route path="/matching" element={<MatchingPage />} />
             <Route path="/matched" element={<MatchedPage />} />
+            <Route path="/testpage" element={<Collab />} />
           </Routes>
         </Router>
       </Box>
