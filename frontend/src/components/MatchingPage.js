@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
 import { Link } from "react-router-dom";
+import AccountMenu from './AccountMenu.js';
 
 const socket = io("http://localhost:8001/", {
   autoConnect: false,
@@ -64,6 +65,8 @@ export default function MatchingPage() {
   };
 
   return (
+    <>
+    <AccountMenu  />
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
@@ -91,5 +94,6 @@ export default function MatchingPage() {
         </Link>
       </Box>
     </Box>
+    </>
   );
 }

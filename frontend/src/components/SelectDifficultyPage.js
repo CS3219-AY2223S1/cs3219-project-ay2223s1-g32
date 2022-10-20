@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   Box,
   Button,
-  Link,
   Select,
   MenuItem,
   FormControl,
@@ -13,6 +12,7 @@ import {
   DialogTitle,
   InputLabel
 } from "@mui/material";
+import AccountMenu from './AccountMenu.js';
 import { LOGOUT_USER_SVC } from "../configs";
 import { STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN } from "../constants";
 import { useNavigate } from "react-router-dom";
@@ -64,12 +64,7 @@ export default function BasicSelect() {
 
   return (
     <>
-      <Link underline="hover" justifyContent={"flex-end "}
-        sx={{ marginTop: "-2.2rem" }}
-        alignSelf={"flex-end"}
-        onClick={handleLogout}>
-        {'Logout'}
-      </Link>
+      <AccountMenu />
       <text style={{ marginBottom: 20, fontSize: 28 }}>Select your difficulty: </text>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
