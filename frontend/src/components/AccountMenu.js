@@ -67,7 +67,6 @@ export default function AccountMenu() {
   };
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex-end', alignSelf:"flex-end", alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -77,12 +76,11 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56 }}>
+            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56,  }}>
             <ManageAccountsIcon />
             </Avatar>
           </IconButton>
         </Tooltip>
-      </Box>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"

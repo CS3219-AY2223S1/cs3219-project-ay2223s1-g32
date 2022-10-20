@@ -7,7 +7,7 @@ import {
   FormControl,
   InputLabel
 } from "@mui/material";
-import AccountMenu from '../components/AccountMenu.js';
+import TopNavBar from '../components/TopNavBar.js';
 import { useNavigate } from "react-router-dom";
 
 export default function BasicSelect() {
@@ -25,7 +25,7 @@ export default function BasicSelect() {
 
   return (
     <>
-      <AccountMenu />
+      <TopNavBar />
       <text style={{ marginBottom: 20, fontSize: 28 }}>Select your difficulty: </text>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>

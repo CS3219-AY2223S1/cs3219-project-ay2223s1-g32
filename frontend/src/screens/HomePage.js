@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import * as React from "react";
 
-function HomePage() {
+function Homepage() {
 
     return (
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
@@ -13,4 +13,4 @@ function HomePage() {
     )
 }
 
-export default HomePage;
+export default Homepage;
