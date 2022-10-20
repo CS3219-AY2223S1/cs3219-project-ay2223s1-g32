@@ -12,7 +12,7 @@ export default function TopNavBar() {
 
   return (
     <Container maxWidth={false}
-        sx={{ display: 'flex', justifyContent:'space-between', paddingBottom: 4, marginTop: -4}}
+        sx={{ width: document.documentElement.width, display: 'flex', justifyContent:'space-between', paddingBottom: 4, marginTop: -4}}
     >
     <Box 
         sx={{
@@ -20,7 +20,7 @@ export default function TopNavBar() {
             alignSelf:"flex-start",
             alignItems: 'center',
             textAlign: 'center',
-            marginLeft:-3.5
+            marginLeft:-3
         }}>
         <Button onClick={()=>{navigate('/selectdifficulty')}}>
         <img
@@ -30,7 +30,7 @@ export default function TopNavBar() {
         />
         </Button>
     </Box>
-    <Box sx={{ justifyContent: 'flex-end', alignSelf:"flex-end", alignItems: 'center', textAlign: 'center'}}>
+    <Box sx={{ alignSelf:"flex-end", alignItems: 'center', textAlign: 'center', marginTop:-5}}>
     <AccountMenu  />
     </Box>
   </Container>

@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
 import { Link } from "react-router-dom";
-import AccountMenu from '../components/AccountMenu.js';
+import TopNavBar from '../components/TopNavBar.js';
 
 const socket = io("http://localhost:8001/", {
   autoConnect: false,
@@ -66,7 +66,7 @@ export default function MatchingPage() {
 
   return (
     <>
-    <AccountMenu  />
+    <TopNavBar  />
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >

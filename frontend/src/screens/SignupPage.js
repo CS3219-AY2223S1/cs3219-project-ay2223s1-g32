@@ -65,6 +65,7 @@ function SignupPage() {
     };
 
     return (
+        <>
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
             <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
             <TextField
@@ -107,7 +108,7 @@ function SignupPage() {
                     }
                 </DialogActions>
             </Dialog>
-        </Box>
+        </Box></>
     )
 }
 

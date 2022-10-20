@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Box,
   Menu,
   MenuItem,
   Button,
@@ -15,7 +14,7 @@ import {
   IconButton
 } from "@mui/material";
 import { LOGOUT_USER_SVC } from "../configs";
-import { STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN } from "../constants";
+import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../constants";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
@@ -31,7 +30,7 @@ export default function AccountMenu() {
   const [dialogTitle, setDialogTitle] = useState("")
   const [dialogMsg, setDialogMsg] = useState("")
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
-  const redirect = useNavigate() // re-direct api
+  const navigate = useNavigate() // re-direct api
 
   const handleLogout = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
@@ -45,9 +44,9 @@ export default function AccountMenu() {
           setErrorDialog('Please try again later')
         }
       })
-    if (res && res.status === STATUS_CODE_LOGGEDIN) {
+    if (res && res.status === STATUS_CODE_SUCCESS) {
       setIsLogoutSuccess(true);
-      redirect("/");
+      navigate("/");
     }
   }
   const closeDialog = () => setIsDialogOpen(false)
@@ -76,7 +75,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56,  }}>
+            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56 }}>
             <ManageAccountsIcon />
             </Avatar>
           </IconButton>
@@ -123,7 +122,7 @@ export default function AccountMenu() {
           <Avatar /> My account
         </MenuItem>
         <Divider /> */}
-        <MenuItem>
+        <MenuItem onClick={() => {navigate('/account/settings')}}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

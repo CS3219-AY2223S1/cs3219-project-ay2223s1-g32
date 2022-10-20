@@ -87,7 +87,7 @@ export async function getUserToken(username) {
 
 export function getRequestToken(token) {
   const bearer = 'bearer ';
-  console.log(token);
+  console.log("TOKEN" + token);
 
   return token && token.toLowerCase().startsWith(bearer)
     ? token.substring(bearer.length)
