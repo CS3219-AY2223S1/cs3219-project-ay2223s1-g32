@@ -1,19 +1,64 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import IconButton from '@mui/material/IconButton';
+import {
+  Box,
+  Menu,
+  MenuItem,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tooltip,
+  Avatar,
+  ListItemIcon,
+  IconButton
+} from "@mui/material";
+import { LOGOUT_USER_SVC } from "../configs";
+import { STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN } from "../constants";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { green } from '@mui/material/colors';
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [dialogTitle, setDialogTitle] = useState("")
+  const [dialogMsg, setDialogMsg] = useState("")
+  const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
+  const redirect = useNavigate() // re-direct api
+
+  const handleLogout = async () => {
+    const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
+    const res = await axios.post(LOGOUT_USER_SVC, { 
+      headers: {
+        "Authorization": `Bearer ${userAuthToken}`
+      } }).catch((err) => {
+        if (err.response.status === STATUS_CODE_FAILED) {
+          setErrorDialog(err.response.data.message);
+        } else {
+          setErrorDialog('Please try again later')
+        }
+      })
+    if (res && res.status === STATUS_CODE_LOGGEDIN) {
+      setIsLogoutSuccess(true);
+      redirect("/");
+    }
+  }
+  const closeDialog = () => setIsDialogOpen(false)
+
+  const setErrorDialog = (msg) => {
+    setIsDialogOpen(true)
+    setDialogTitle('Error')
+    setDialogMsg(msg)
+  }
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -86,13 +131,27 @@ export default function AccountMenu() {
           </ListItemIcon>
             Account Settings
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
       </Menu>
+      <Dialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+        >
+          <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{dialogMsg}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {!isLogoutSuccess
+              ? <Button onClick={closeDialog}>Close</Button> : <></>
+            }
+          </DialogActions>
+        </Dialog>
     </React.Fragment>
   );
 }

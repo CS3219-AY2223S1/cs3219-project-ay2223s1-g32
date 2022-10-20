@@ -1,8 +1,8 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './components/SignupPage';
-import LoginPage from './components/LoginPage';
-import SelectDifficultyPage from "./components/SelectDifficultyPage";
-import MatchingPage from "./components/MatchingPage";
+import SignupPage from './screens/SignupPage';
+import LoginPage from './screens/LoginPage';
+import SelectDifficultyPage from "./screens/SelectDifficultyPage";
+import MatchingPage from "./screens/MatchingPage";
 import {Box} from "@mui/material";
 import React from 'react'
 
