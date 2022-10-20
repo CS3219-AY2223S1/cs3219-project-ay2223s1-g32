@@ -3,7 +3,7 @@ import { ormCreateBlacklistedToken as _createBlacklistedToken } from "../model/b
 
 export async function logoutUser(req, res) {
   try {
-    const token = getRequestToken(req);
+    const token = getRequestToken(req.get('Authorization'));
     const user = await getTokenUser(token);
     if (!user) {
       return res.status(400).json({message: `Invalid authorization token`});

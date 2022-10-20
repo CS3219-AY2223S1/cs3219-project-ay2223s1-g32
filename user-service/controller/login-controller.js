@@ -8,10 +8,7 @@ export async function loginUser(req, res) {
     if (!isSuccess) {
       return res.status(400).json({message: 'Incorrect username or password'});
     }
-
     const token = await getUserToken(username);
-    console.log("token:" + token)
-    res.cookie('token', token, { httpOnly: true });
     return res.status(200).json({ username, token });
   } catch (error) {
     console.log(error)

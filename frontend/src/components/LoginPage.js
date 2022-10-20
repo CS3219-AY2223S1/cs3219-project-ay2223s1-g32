@@ -15,6 +15,7 @@ import axios from "axios";
 import {LOGIN_USER_SVC} from "../configs";
 import {STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN} from "../constants";
 import {useNavigate} from "react-router-dom";
+import * as React from "react";
 
 function LoginPage() {
     const [username, setUsername] = useState("")
@@ -36,6 +37,9 @@ function LoginPage() {
                 }
             })
         if (res && res.status === STATUS_CODE_LOGGEDIN) {
+            // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
+            document.cookie="authToken=" + res.data.token;
+            document.cookie="username=" + res.data.username;
             setIsLoginSuccess(true)
             redirect("/selectdifficulty");
         }

@@ -1,6 +1,6 @@
 import UserModel from './user-model.js';
 import BlacklistedTokenModel from './blacklisted-token-model.js';
-import 'dotenv/config'
+import 'dotenv/config';
 import * as bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 
@@ -85,12 +85,12 @@ export async function getUserToken(username) {
   return token;
 }
 
-export function getRequestToken(request) {
-  const auth = request.get('authorization');
+export function getRequestToken(token) {
   const bearer = 'bearer ';
+  console.log(token);
 
-  return auth && auth.toLowerCase().startsWith(bearer)
-    ? auth.substring(bearer.length)
+  return token && token.toLowerCase().startsWith(bearer)
+    ? token.substring(bearer.length)
     : null;
 }
 
@@ -99,13 +99,12 @@ export async function getTokenUser(token) {
     const decodedToken = token
       ? jsonwebtoken.verify(token, process.env.SECRET)
       : null;
-  
     const isBlacklistedToken = await getBlacklistedToken(token);
 
     const user = decodedToken && !isBlacklistedToken
       ? await UserModel.findById(decodedToken.id)
       : null;
-    
+
     return user;
     
   } catch (error) {

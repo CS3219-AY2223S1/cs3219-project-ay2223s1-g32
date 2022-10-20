@@ -1,10 +1,10 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
-import HomePage from './components/HomePage';
 import SelectDifficultyPage from "./components/SelectDifficultyPage";
 import MatchingPage from "./components/MatchingPage";
 import {Box} from "@mui/material";
+import React from 'react'
 
 function App() {
     return (
@@ -15,7 +15,6 @@ function App() {
                         <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
                         <Route path="/signup" element={<SignupPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
-                        <Route path="/homepage" element={<HomePage/>}/>
                         <Route path="/selectdifficulty" element={<SelectDifficultyPage />}/>
                         <Route path="/matching" element={<MatchingPage />} />
                     </Routes>

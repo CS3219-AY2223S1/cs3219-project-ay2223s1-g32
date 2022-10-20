@@ -13,11 +13,11 @@ import {
   DialogTitle,
   InputLabel
 } from "@mui/material";
-import {LOGOUT_USER_SVC} from "../configs";
-import {STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN} from "../constants";
+import { LOGOUT_USER_SVC } from "../configs";
+import { STATUS_CODE_FAILED, STATUS_CODE_LOGGEDIN } from "../constants";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {useState} from "react";
+import { useState } from "react";
 
 export default function BasicSelect() {
   const navigate = useNavigate();
@@ -26,7 +26,6 @@ export default function BasicSelect() {
   const [dialogTitle, setDialogTitle] = useState("")
   const [dialogMsg, setDialogMsg] = useState("")
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
-
   const redirect = useNavigate() // re-direct api
 
   const handleChange = (event) => {
@@ -35,26 +34,29 @@ export default function BasicSelect() {
   };
 
   const handleLogout = async () => {
-    const res = await axios.post(LOGOUT_USER_SVC)
-        .catch((err) => {
-            if (err.response.status === STATUS_CODE_FAILED) {
-                setErrorDialog(err.response.data.message);
-            } else {
-                setErrorDialog('Please try again later')
-            }
-        })
+    const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
+    const res = await axios.post(LOGOUT_USER_SVC, { 
+      headers: {
+        "Authorization": `Bearer ${userAuthToken}`
+      } }).catch((err) => {
+        if (err.response.status === STATUS_CODE_FAILED) {
+          setErrorDialog(err.response.data.message);
+        } else {
+          setErrorDialog('Please try again later')
+        }
+      })
     if (res && res.status === STATUS_CODE_LOGGEDIN) {
       setIsLogoutSuccess(true);
       redirect("/");
     }
-}  
-const closeDialog = () => setIsDialogOpen(false)
+  }
+  const closeDialog = () => setIsDialogOpen(false)
 
-const setErrorDialog = (msg) => {
+  const setErrorDialog = (msg) => {
     setIsDialogOpen(true)
     setDialogTitle('Error')
     setDialogMsg(msg)
-}
+  }
 
   const confirmButton = () => {
     navigate("/matching");
@@ -62,44 +64,44 @@ const setErrorDialog = (msg) => {
 
   return (
     <>
-    <Link underline="hover" justifyContent={"flex-end "} 
-    sx={{marginTop: "-2.2rem"}}
-    alignSelf={"flex-end"}
-    onClick={handleLogout}>
-    {'Logout'}
-    </Link>
-    <text style={{marginBottom: 20, fontSize: 28}}>Select your difficulty: </text>
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={difficulty}
-          label="Difficulty"
-          onChange={handleChange}
-        >
-          <MenuItem value={"Easy"}>Easy</MenuItem>
-          <MenuItem value={"Medium"}>Medium</MenuItem>
-          <MenuItem value={"Difficult"}>Difficult</MenuItem>
-        </Select>
-      </FormControl>
-      <Dialog
+      <Link underline="hover" justifyContent={"flex-end "}
+        sx={{ marginTop: "-2.2rem" }}
+        alignSelf={"flex-end"}
+        onClick={handleLogout}>
+        {'Logout'}
+      </Link>
+      <text style={{ marginBottom: 20, fontSize: 28 }}>Select your difficulty: </text>
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={difficulty}
+            label="Difficulty"
+            onChange={handleChange}
+          >
+            <MenuItem value={"Easy"}>Easy</MenuItem>
+            <MenuItem value={"Medium"}>Medium</MenuItem>
+            <MenuItem value={"Difficult"}>Difficult</MenuItem>
+          </Select>
+        </FormControl>
+        <Dialog
           open={isDialogOpen}
           onClose={closeDialog}
-      >
-        <DialogTitle>{dialogTitle}</DialogTitle>
-        <DialogContent>
+        >
+          <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogContent>
             <DialogContentText>{dialogMsg}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
+          </DialogContent>
+          <DialogActions>
             {!isLogoutSuccess
-                ? <Button onClick={closeDialog}>Close</Button> : <></>
+              ? <Button onClick={closeDialog}>Close</Button> : <></>
             }
-        </DialogActions>
-      </Dialog>
-    </Box>
-    <Button onClick={confirmButton} style={{width: 100, marginTop: 10}}>Confirm</Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+      <Button onClick={confirmButton} style={{ width: 100, marginTop: 10 }}>Confirm</Button>
     </>
   );
 }

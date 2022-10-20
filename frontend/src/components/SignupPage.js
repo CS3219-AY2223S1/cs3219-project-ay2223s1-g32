@@ -10,11 +10,11 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {URL_USER_SVC} from "../configs";
 import {STATUS_CODE_FAILED, STATUS_CODE_CREATED} from "../constants";
-import {useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function SignupPage() {
     const [username, setUsername] = useState("")
@@ -47,22 +47,22 @@ function SignupPage() {
   };
 
     const handleLoginNav = async () => {
-        redirect("/login");
-    }
+            redirect("/login");
+        }
 
     const closeDialog = () => setIsDialogOpen(false)
 
-  const setSuccessDialog = (msg) => {
-    setIsDialogOpen(true);
-    setDialogTitle("Success");
-    setDialogMsg(msg);
-  };
+    const setSuccessDialog = (msg) => {
+        setIsDialogOpen(true);
+        setDialogTitle("Success");
+        setDialogMsg(msg);
+    };
 
-  const setErrorDialog = (msg) => {
-    setIsDialogOpen(true);
-    setDialogTitle("Error");
-    setDialogMsg(msg);
-  };
+    const setErrorDialog = (msg) => {
+        setIsDialogOpen(true);
+        setDialogTitle("Error");
+        setDialogMsg(msg);
+    };
 
     return (
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
