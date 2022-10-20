@@ -4,12 +4,12 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Tooltip from '@mui/material/Tooltip';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { green } from '@mui/material/colors';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,7 +32,9 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 40, height: 40 }}>x</Avatar>
+            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56 }}>
+            <ManageAccountsIcon />
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
