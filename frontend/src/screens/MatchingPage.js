@@ -10,6 +10,7 @@ import TopNavBar from '../components/TopNavBar.js';
 
 const socket = io("http://localhost:8001/", {
   autoConnect: false,
+  withCredentials: true,
 });
 
 socket.on("connect", () => {

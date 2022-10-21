@@ -8,7 +8,10 @@ import CodeMirror from "@uiw/react-codemirror";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 
 // const socket = io("http://localhost:3001/", {});
-const socket = io("http://localhost:8001/", {});
+const socket = io("http://localhost:8001/", {
+  autoConnect: false,
+  withCredentials: true,
+});
 const url = "mongodb://localhost:27017/mydb/";
 
 function Collab() {
