@@ -16,7 +16,12 @@ app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World from matching-service");
@@ -39,21 +44,29 @@ io.on("connection", (socket) => {
 
     if (!userInQueue && matchedUser) {
       deleteMatch(matchedUser);
-      socket.emit("Success", "Match with same difficulty found.");
+      socket.emit("SuccessMatched", "Match with same difficulty found.");
       io.to(matchedUser["socketId"]).emit(
         "Success",
         "Match with same difficulty found."
       );
+      return;
     } else if (!userInQueue) {
       ormCreateMatchRequest(username, difficulty, socket.id);
       socket.emit("Success", "User added to matching queue");
-      setTimeout(async () => {
+      var count = 0;
+      const interval = setInterval(async () => {
         const userStillInQueue = await getMatchUsername(username);
-        if (userStillInQueue) {
+        if (!userStillInQueue) {
+          socket.emit("SuccessMatched", "Match with same difficulty found.");
+          clearInterval(interval);
+        }
+        count++;
+        if(count == 30 && userStillInQueue) {
           await deleteMatch(userStillInQueue);
           socket.emit("TimeoutError", "Match not found in 30s");
+          clearInterval(interval); 
         }
-      }, 30000);
+      }, 1000);
     } else {
       socket.emit("Error", "User already in being matched.");
     }

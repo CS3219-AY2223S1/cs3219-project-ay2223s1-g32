@@ -1,4 +1,5 @@
 import UserModel from './user-model.js';
+import MatchRequestModel from './match-request-model.js';
 import BlacklistedTokenModel from './blacklisted-token-model.js';
 import 'dotenv/config';
 import * as bcrypt from 'bcrypt';

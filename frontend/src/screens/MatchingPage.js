@@ -8,27 +8,6 @@ import { io } from "socket.io-client";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import TopNavBar from '../components/TopNavBar.js';
 
-const socket = io("http://localhost:8001/", {
-  autoConnect: false,
-  withCredentials: true,
-});
-
-socket.on("connect", () => {
-  console.log("Server successfully connected"); // false
-});
-
-socket.on("Success", (response) => {
-  console.log(response); // false
-});
-
-socket.on("Error", (response) => {
-  console.log(response); // false
-});
-
-socket.on("TimeoutError", (response) => {
-  console.log(response); // false
-});
-
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
   const timerRef = React.useRef();
@@ -38,6 +17,32 @@ export default function MatchingPage() {
   const difficulty = location.state.difficulty;
   const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
 
+  const socket = io("http://localhost:8001/", {
+    autoConnect: false,
+    withCredentials: true,
+  });
+
+  socket.on("connect", () => {
+    console.log("Server successfully connected"); // false
+  });
+
+  socket.on("SuccessAdd", (response) => {
+    console.log(response); // false
+  });
+
+  socket.on("SuccessMatched", (response) => {
+    console.log(response); // false
+    navigate("/matched", { state : { difficulty: difficulty }});
+  });
+
+  socket.on("Error", (response) => {
+    console.log(response); // false
+  });
+
+  socket.on("TimeoutError", (response) => {
+    console.log(response); // false
+  });
+
   React.useEffect(
     () => () => {
       clearTimeout(timerRef.current);
@@ -46,6 +51,7 @@ export default function MatchingPage() {
   );
 
   const handleClickQuery = () => {
+    console.log("username: " + username);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -62,13 +68,14 @@ export default function MatchingPage() {
     socket.connect();
     socket.emit("match", message, (response) => {
       console.log("msg emitted");
-      // navigate("/matched", { state : { difficulty: difficulty }});
       console.log(response);
     });
 
     timerRef.current = window.setTimeout(() => {
       setQuery("success");
-    }, 30000);
+      //navigate("/matched", { state : { difficulty: difficulty }});
+    //}, 30000);
+    }, 5000);
   };
 
   return (

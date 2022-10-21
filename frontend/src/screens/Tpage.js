@@ -8,16 +8,16 @@ import CodeMirror from "@uiw/react-codemirror";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 
 // const socket = io("http://localhost:3001/", {});
-const socket = io("http://localhost:8001/", {
-  autoConnect: false,
+const socket = io("http://localhost:3001/", {
+  autoConnect: true,
   withCredentials: true,
 });
-const url = "mongodb://localhost:27017/mydb/";
 
 function Collab() {
   const [code, setCode] = React.useState("");
   socket.on("receive code", (payload) => {
-    setCode(payload);
+    console.log(JSON.stringify(payload));
+    setCode(payload.code);
   })
   const [question, setQuestion] = React.useState("");
   const navigate = useNavigate();
@@ -26,15 +26,15 @@ function Collab() {
 
   React.useEffect(() => {
     socket.emit("room", { roomID: 1 });
-    axios.get('http://localhost:8002/api/question/random')
-    .then(resp => setQuestion(resp.data));
+    axios.get('http://localhost:8002/api/question/')
+    .then(resp => setQuestion(resp.data[1]));
 
     return () => {
       socket.emit("leave room", {
         roomID: 1,
       });
     }
-  })
+  }, []);
 
   const codeIsHappening = (newCode) => {
     socket.emit("coding event", {
@@ -62,7 +62,7 @@ function Collab() {
         options={options}
         height="200px"
         theme={dracula}
-        onChange={codeIsHappening(code)}
+        onChange={(code) => codeIsHappening(code)}
         // onBeforeChange={(editor, data, value) => {
         //   this.setState({ value });
         // }}
