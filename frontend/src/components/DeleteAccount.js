@@ -35,7 +35,7 @@ export default function DeleteAccount() {
       }
      }).catch((err) => {
         if (err.response.status === STATUS_CODE_FAILED || 500) {
-          setErrorDialog(err.response.data.message);
+          setErrorDialog("Error completing action");
         } else {
           setErrorDialog('Please try again later')
         }

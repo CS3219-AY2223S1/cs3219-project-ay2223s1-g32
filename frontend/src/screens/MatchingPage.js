@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import TopNavBar from '../components/TopNavBar.js';
 
 const socket = io("http://localhost:8001/", {
@@ -31,6 +31,11 @@ socket.on("TimeoutError", (response) => {
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
   const timerRef = React.useRef();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [user, setUser] = React.useState("");
+  const difficulty = location.state.difficulty;
+  const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
 
   React.useEffect(
     () => () => {
@@ -49,13 +54,14 @@ export default function MatchingPage() {
       return;
     }
     var message = {
-      username: "easy_user2",
-      difficulty: "easy",
+      username: username,
+      difficulty: difficulty,
     };
     setQuery("progress");
     socket.connect();
     socket.emit("match", message, (response) => {
       console.log("msg emitted");
+      // navigate("/matched", { state : { difficulty: difficulty }});
       console.log(response);
     });
 
@@ -88,11 +94,18 @@ export default function MatchingPage() {
       <Button onClick={handleClickQuery} sx={{ m: 2 }}>
         {query !== "idle" ? "Stop Matching" : "Start Matching"}
       </Button>
-      <Box sx={{ height: 40 }}>
-        <Link to="/selectdifficulty">
-          <Button variant="outlined">Go Back</Button>
-        </Link>
-      </Box>
+      <div>
+        <Box sx={{ height: 40 }}>
+          <Link to="/">
+            <Button variant="outlined">Go Home</Button>
+          </Link>
+        </Box>
+        <Box sx={{ height: 40 }}>
+          <Link to="/selectdifficulty">
+            <Button variant="outlined">Change difficulty</Button>
+          </Link>
+        </Box>
+      </div>
     </Box>
     </>
   );
