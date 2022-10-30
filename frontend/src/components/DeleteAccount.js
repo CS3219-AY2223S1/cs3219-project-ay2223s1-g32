@@ -26,29 +26,42 @@ export default function DeleteAccount() {
 
   const handleDeletion = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
-    const res = await axios.delete(URL_USER_SVC, { 
-      headers: {
-        "Authorization": `Bearer ${userAuthToken}`
-      },
+    const res = await fetch(URL_USER_SVC, {
+      method: 'DELETE',
       data: {
-        username: username
+        username: username,
+      },
+      headers: {
+          'Authorization': `Bearer ${userAuthToken}`,
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
       }
-     }).catch((err) => {
-        if (err.response.status === STATUS_CODE_FAILED || 500) {
-          setErrorDialog("Error completing action");
-        } else {
-          setErrorDialog('Please try again later')
-        }
-      })
-    if (res && res.status === 204) {
-      setIsDeleteSuccessful(true);
+  }).then(res => 
+    {
+      if (res && res.status === 204) {
+        setIsDeleteSuccessful(true);
+        setSuccessDialog("Successfully changed your password!")
+      }
+    })
+  .catch (err => {
+    if (err.response.status === STATUS_CODE_FAILED || 500) {
+      setErrorDialog("Error completing action");
+    } else {
+      setErrorDialog('Please try again later')
     }
-  }
+  });
+}
   const closeDialog = () => setIsDialogOpen(false)
 
   const setErrorDialog = (msg) => {
     setIsDialogOpen(true)
     setDialogTitle('Error')
+    setDialogMsg(msg)
+  }
+
+  const setSuccessDialog = (msg) => {
+    setIsDialogOpen(true)
+    setDialogTitle('Success')
     setDialogMsg(msg)
   }
 

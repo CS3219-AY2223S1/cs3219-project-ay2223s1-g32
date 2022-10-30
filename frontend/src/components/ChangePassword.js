@@ -27,30 +27,44 @@ export default function ChangePassword() {
   const handlePasswordChange = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
     const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
-    const res = await axios.put(URL_USER_SVC, { 
-      headers: {
-        "Authorization": `Bearer ${userAuthToken}`
-      },
+    const res = await fetch(URL_USER_SVC, {
+      method: 'PUT',
       data: {
         username: username,
         newPassword: newPassword
+      },
+      headers: {
+          'Authorization': `Bearer ${userAuthToken}`,
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
       }
-     }).catch((err) => {
-        if (err.response.status === STATUS_CODE_FAILED) {
-          setErrorDialog(err.response.data.message);
-        } else {
-          setErrorDialog('Please try again later')
-        }
-      })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setIsPasswordChangeSuccess(true);
+  }).then(res => 
+    {
+      if (res && res.status === STATUS_CODE_SUCCESS) {
+        setIsPasswordChangeSuccess(true);
+        setSuccessDialog("Successfully deleted your account");
+        navigate('/');
+      }
+    })
+  .catch (err => {
+    if (err.response.status === STATUS_CODE_FAILED) {
+      setErrorDialog(err.response.data.message);
+    } else {
+      setErrorDialog('Please try again later')
     }
-  }
+  });
+}
   const closeDialog = () => setIsDialogOpen(false)
 
   const setErrorDialog = (msg) => {
     setIsDialogOpen(true)
     setDialogTitle('Error')
+    setDialogMsg(msg)
+  }
+
+  const setSuccessDialog = (msg) => {
+    setIsDialogOpen(true)
+    setDialogTitle('Success')
     setDialogMsg(msg)
   }
 
