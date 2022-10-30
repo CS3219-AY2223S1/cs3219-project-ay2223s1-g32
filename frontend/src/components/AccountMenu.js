@@ -34,20 +34,36 @@ export default function AccountMenu() {
 
   const handleLogout = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
-    const res = await axios.post(LOGOUT_USER_SVC, { 
+    const res = await fetch(LOGOUT_USER_SVC, {
+      method: 'POST',
       headers: {
-        "Authorization": `Bearer ${userAuthToken}`
-      } }).catch((err) => {
-        if (err.response.status === STATUS_CODE_FAILED) {
-          setErrorDialog(err.response.data.message);
-        } else {
-          setErrorDialog('Please try again later')
-        }
-      })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setIsLogoutSuccess(true);
-      navigate("/");
-    }
+          'Authorization': `Bearer ${userAuthToken}`,
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+  })
+      .then(res => 
+        {
+          if (res && res.status === STATUS_CODE_SUCCESS) {
+              setIsLogoutSuccess(true);
+              navigate("/");
+        }})
+      .catch (err => console.log(err))
+
+    // const res = await axios.post(LOGOUT_USER_SVC, { 
+    //   headers: {
+    //     "Authorization": `Bearer ${userAuthToken}`
+    //   } }).catch((err) => {
+    //     if (err.response.status === STATUS_CODE_FAILED) {
+    //       setErrorDialog(err.response.data.message);
+    //     } else {
+    //       setErrorDialog('Please try again later')
+    //     }
+    //   })
+    // if (res && res.status === STATUS_CODE_SUCCESS) {
+    //   setIsLogoutSuccess(true);
+    //   navigate("/");
+    // }
   }
   const closeDialog = () => setIsDialogOpen(false)
 
