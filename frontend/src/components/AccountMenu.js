@@ -48,23 +48,15 @@ export default function AccountMenu() {
               setIsLogoutSuccess(true);
               navigate("/");
         }})
-      .catch (err => console.log(err))
-
-    // const res = await axios.post(LOGOUT_USER_SVC, { 
-    //   headers: {
-    //     "Authorization": `Bearer ${userAuthToken}`
-    //   } }).catch((err) => {
-    //     if (err.response.status === STATUS_CODE_FAILED) {
-    //       setErrorDialog(err.response.data.message);
-    //     } else {
-    //       setErrorDialog('Please try again later')
-    //     }
-    //   })
-    // if (res && res.status === STATUS_CODE_SUCCESS) {
-    //   setIsLogoutSuccess(true);
-    //   navigate("/");
-    // }
+      .catch (err => {
+        if (err.response.status === STATUS_CODE_FAILED) {
+                setErrorDialog(err.response.data.message);
+              } else {
+                setErrorDialog('Please try again later')
+              }
+      });
   }
+  
   const closeDialog = () => setIsDialogOpen(false)
 
   const setErrorDialog = (msg) => {
