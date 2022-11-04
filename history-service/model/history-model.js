@@ -3,11 +3,11 @@ const mongoose = require("mongoose")
 var Schema = mongoose.Schema
 let HistoryModelSchema = new Schema({
   user: {
-      type: string,
+      type: String,
       required: true,
   },
   collaborator: {
-    type: string,
+    type: String,
     required: true,
   },
   question: {
@@ -17,6 +17,6 @@ let HistoryModelSchema = new Schema({
   content: {
     type: String,
   }
-}, { timestamps: { createdAt: timestamp } })
+}, { timestamps: { createdAt: "timestamp" } })
 
 module.exports = mongoose.model('HistoryModel', HistoryModelSchema)
