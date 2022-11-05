@@ -10,7 +10,7 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const getAllHistories = async () => { 
-  const histories = await History.find({})
+  const histories = await History.find({}).sort({ 'user': 1, 'timestamp': -1 })
   return histories
 }
 
@@ -20,7 +20,7 @@ const getHistory = async (id) => {
 }
 
 const getUserHistory = async (userId) => {
-  const history = await History.find({ user: userId })
+  const history = await History.find({ user: userId }).sort({ 'timestamp': -1 })
   return history
 }
 
