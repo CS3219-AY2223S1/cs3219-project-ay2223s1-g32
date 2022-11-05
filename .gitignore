@@ -1,0 +1,7 @@
+chatting-service/client/node_modules/
+chatting-service/server/node_modules/.bin/nodemon
+chatting-service/server/node_modules/
+frontend/node_modules/
+matching-service/node_modules/@socket.io/component-emitter/index.d.ts
+matching-service/node_modules/
+user-service/node_modules/
