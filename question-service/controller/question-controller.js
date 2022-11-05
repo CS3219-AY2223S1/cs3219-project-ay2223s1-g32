@@ -13,7 +13,7 @@ const getAllQuestions = async (req, res, next) => {
 
 const getQuestion = async (req, res, next) => {
   try {
-    const { id } = req.body
+    const { id } = req.params
     const question = await QuestionRepository.getQuestion(id)
     return question
       ? res.status(200).json(question)
@@ -27,8 +27,8 @@ const getQuestion = async (req, res, next) => {
 
 const getRandomQuestion = async (req, res, next) => {
   try {
-    const { prevId, difficulty, topic } = req.body
-    const question = await QuestionRepository.getRandomQuestion(prevId, difficulty, topic)
+    const { prevId, difficulty } = req.query
+    const question = await QuestionRepository.getRandomQuestion(prevId, difficulty)
     return question
       ? res.status(200).json(question)
       : res.status(404).json({message: "Question not found."});
