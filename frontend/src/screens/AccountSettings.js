@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import TopNavBar from '../components/TopNavBar.js';
 import ChangePassword from "../components/ChangePassword.js"
 import DeleteAccount from '../components/DeleteAccount.js';
+import QuestionHistory from '../components/QuestionHistory.js';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,12 +65,16 @@ export default function AccountSettings() {
       >
         <Tab label="Update/Change Password" {...a11yProps(0)} />
         <Tab label="Delete Account" {...a11yProps(1)} />
+        <Tab label="Question History" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0} >
-      <ChangePassword  />
+        <ChangePassword  />
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <DeleteAccount  />
+        <DeleteAccount  />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <QuestionHistory />
       </TabPanel>
     </Box>
     </>

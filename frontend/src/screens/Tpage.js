@@ -3,9 +3,8 @@ import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import TopNavBar from "../components/TopNavBar";
-import ChatRoom from "../../src/components/src/ChatRoom/ChatRoom";
-//import ChatRoom from "./src/ChatRoom/ChatRoom";
-import { Box } from "@mui/material";
+import ChatRoom from "../components/src/ChatRoom/ChatRoom";
+import { Alert, Box, Button } from "@mui/material";
 import { CodemirrorBinding } from "y-codemirror";
 import { UnControlled as CodeMirrorEditor } from "react-codemirror2";
 import * as Y from "yjs";
@@ -25,7 +24,7 @@ function Collab() {
   });
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
-  const difficulty = location.state.difficulty;
+  const difficulty = "location.state.difficulty";
   const roomID = 1;
   const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
   const [EditorRef, setEditorRef] = React.useState(null);
@@ -89,6 +88,21 @@ function Collab() {
     }
   }, [EditorRef]);
 
+  const onSubmitCode = () => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:8005/api/history/',
+      data: {
+        user: username,
+        collaborator: username, // to change
+        question: question.name,
+        content: code,
+      }
+    }).then(() => {
+      window.alert("Submitted successfully!");
+    });
+  }
+
   return (
     <div>
       <TopNavBar />
@@ -104,6 +118,7 @@ function Collab() {
           width: "100%",
           fontSize: "20px",
           overflowY: "auto",
+          marginTop: "20px",
         }}
       >
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
@@ -135,7 +150,12 @@ function Collab() {
         />
         <ChatRoom roomid={roomID} username={username} />
         </Box>
-      </div>{" "}
+      </div>
+      <Box sx={{marginTop: "30px"}}>
+      <Button size="large" variant="contained" onClick={onSubmitCode}>
+        Submit
+      </Button>
+      </Box>
     </div>
   );
 }
