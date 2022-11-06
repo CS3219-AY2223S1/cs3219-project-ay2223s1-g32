@@ -61,8 +61,8 @@ const ChatRoom = (props) => {
 
   return (
     <ChakraProvider theme={theme}>
-      <Flex w="100%" h="100vh" justify="center" align="center">
-        <Flex w="40%" h="90%" flexDir="column">
+      <Flex w="100%" h="100%" justify="center" align="center">
+        <Flex w="70%" h="90%" flexDir="column">
           <Flex w="100%">
             <Avatar
               size="lg"

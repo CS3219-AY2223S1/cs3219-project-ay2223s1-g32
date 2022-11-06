@@ -1,11 +1,11 @@
 import { io } from "socket.io-client";
 import React from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TopNavBar from "../components/TopNavBar";
-
-// import CodeMirror from "@uiw/react-codemirror";
-// import { dracula } from "@uiw/codemirror-theme-dracula";
+import ChatRoom from "../../src/components/src/ChatRoom/ChatRoom";
+//import ChatRoom from "./src/ChatRoom/ChatRoom";
+import { Box } from "@mui/material";
 import { CodemirrorBinding } from "y-codemirror";
 import { UnControlled as CodeMirrorEditor } from "react-codemirror2";
 import * as Y from "yjs";
@@ -13,7 +13,6 @@ import { WebrtcProvider } from "y-webrtc";
 import "./Editor.css";
 import RandomColor from "randomcolor";
 import "./EditorAddons";
-// const socket = io("http://localhost:3001/", {});
 const socket = io("http://localhost:3001/", {
   autoConnect: true,
   withCredentials: true,
@@ -25,18 +24,21 @@ function Collab() {
     setCode(payload.code);
   });
   const [question, setQuestion] = React.useState("");
-  const difficulty = "location.state.difficulty";
+  const location = useLocation();
+  const difficulty = location.state.difficulty;
+  const roomID = 1;
+  const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
   const [EditorRef, setEditorRef] = React.useState(null);
   const [code, setCode] = React.useState("");
   React.useEffect(() => {
-    socket.emit("room", { roomID: 1 });
+    socket.emit("room", { roomID: roomID });
     axios
       .get("http://localhost:8002/api/question/")
       .then((resp) => setQuestion(resp.data[1]));
 
     return () => {
       socket.emit("leave room", {
-        roomID: 1,
+        roomID: roomID,
       });
     };
   }, []);
@@ -68,7 +70,7 @@ function Collab() {
         const color = RandomColor(); //Provied any random color to be used for each user
 
         awareness.setLocalStateField("user", {
-          name: "Users Name",
+          name: username,
           color: color,
         });
 
@@ -87,22 +89,14 @@ function Collab() {
     }
   }, [EditorRef]);
 
-  {
-    /* <CodeMirror
-          value={code}
-          options={options}
-          height="200px"
-          theme={dracula}
-          onChange={(code) => codeIsHappening(code)}
-        /> */
-  }
-
   return (
     <div>
       <TopNavBar />
-      <h2>
+      <h1>
         {"Difficulty:"} {difficulty}
-      </h2>
+      </h1>
+      <h2>{question.name}</h2>
+        <p>{question.content}</p>
       <div
         style={{
           display: "flex",
@@ -112,8 +106,7 @@ function Collab() {
           overflowY: "auto",
         }}
       >
-        <h2>{question.name}</h2>
-        <p>{question.content}</p>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
         <CodeMirrorEditor
           onChange={(editor, data, value) => {
             setCode(value);
@@ -137,142 +130,13 @@ function Collab() {
           }}
           editorDidMount={(editor) => {
             handleEditorDidMount(editor);
-            editor.setSize("100vw", "50vw");
+            editor.setSize("60vw", "40vw");
           }}
         />
+        <ChatRoom roomid={roomID} username={username} />
+        </Box>
       </div>{" "}
     </div>
   );
 }
-// function Collab() {
-//   const [code, setCode] = React.useState("");
-//   socket.on("receive code", (payload) => {
-//     console.log(JSON.stringify(payload));
-//     setCode(payload.code);
-//   });
-//   const [question, setQuestion] = React.useState("");
-//   const navigate = useNavigate();
-//   const location = useLocation();
-//   const difficulty = "location.state.difficulty";
-
-//   React.useEffect(() => {
-//     socket.emit("room", { roomID: 1 });
-//     axios
-//       .get("http://localhost:8002/api/question/")
-//       .then((resp) => setQuestion(resp.data[1]));
-
-//     return () => {
-//       socket.emit("leave room", {
-//         roomID: 1,
-//       });
-//     };
-//   }, []);
-
-//   const codeIsHappening = (newCode) => {
-//     socket.emit("coding event", {
-//       code: newCode,
-//       roomID: 1,
-//     });
-//     setCode(newCode);
-//   };
-
-//   const options = {
-//     lineNumbers: true,
-//     mode: "javascript",
-//     theme: "monokai",
-//   };
-
-//   return (
-// <>
-//   <TopNavBar />
-//   <div>
-//     <h2>
-//       {"Difficulty:"} {difficulty}
-//     </h2>
-//     <h2>{question.name}</h2>
-//     <p>{question.content}</p>
-//     <div id="editor"></div>
-//     <script type="text/javascript" src="../dist/demo.js" async></script>
-//     {/* <CodeMirror
-//       value={code}
-//       options={options}
-//       height="200px"
-//       theme={dracula}
-//       onChange={(code) => codeIsHappening(code)}
-//     /> */}
-//   </div>
-// </>
-//   );
-// }
-
-// class Collab extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { code: "" };
-//     socket.on("receive code", (payload) => {
-//       this.updateCodeInState(payload);
-//     });
-
-//     const navigate = useNavigate();
-//     const location = useLocation();
-//     const question = location.state.question;
-
-//   }
-
-//   updateCodeInState(payload) {
-//     console.log(payload.code);
-//     this.setState({ code: payload.code });
-//   }
-
-//   codeIsHappening(newCode) {
-//     socket.emit("coding event", {
-//       code: newCode,
-//       roomID: 1,
-//     });
-//   }
-
-//   componentDidMount() {
-//     socket.emit("room", { roomID: 1 });
-//   }
-//   // componentWillReceiveProps(nextProps) {
-//   //   socket.emit("room", { roomID: 1 });
-//   // }
-
-//   componentWillUnmount() {
-//     socket.emit("leave room", {
-//       roomID: 1,
-//     });
-//   }
-
-//   render() {
-//     const options = {
-//       lineNumbers: true,
-//       mode: "javascript",
-//       theme: "monokai",
-//     };
-//     return (
-//       <>
-//       <div>
-//         <h1>{"Title"}</h1>
-//         <p>{"Description"}</p>
-//         <CodeMirror
-//           value={this.state.code}
-//           options={options}
-//           height="200px"
-//           theme={dracula}
-//           onChange={this.codeIsHappening.bind(this)}
-//           // onBeforeChange={(editor, data, value) => {
-//           //   this.setState({ value });
-//           // }}
-//           // onChange={(editor, data, value) => {}}
-//         />
-//       </div>
-//       <div>
-//         <h1>Question: {this.question}</h1>
-//       </div>
-//       </>
-//     );
-//   }
-// }
-
 export default Collab;

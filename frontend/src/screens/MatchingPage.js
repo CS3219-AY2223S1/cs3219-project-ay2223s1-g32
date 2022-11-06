@@ -75,7 +75,7 @@ export default function MatchingPage() {
       setQuery("success");
       //navigate("/matched", { state : { difficulty: difficulty }});
     //}, 30000);
-    }, 5000);
+    }, 30000);
   };
 
   return (
@@ -104,7 +104,7 @@ export default function MatchingPage() {
       </Button>
       <div>
         <Box sx={{ height: 40 }}>
-          <Link to="/">
+          <Link to="/login">
             <Button variant="outlined">Go Home</Button>
           </Link>
         </Box>
