@@ -18,8 +18,8 @@ const questionRouter = express.Router()
 
 questionRouter
   .get('/', getAllQuestions)
-  .get('/id', getQuestion)
   .get('/random', getRandomQuestion)
+  .get('/:id', getQuestion)
 
 
 app.use('/api/question', questionRouter).all((_, res) => {

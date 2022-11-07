@@ -19,7 +19,7 @@ const getQuestion = async (id) => {
   return question
 }
 
-const getRandomQuestion = async (prevId, difficulty, topic) => { 
+const getRandomQuestion = async (prevId, difficulty) => { 
   // set conditions
   let conditions = {}
   
@@ -29,10 +29,6 @@ const getRandomQuestion = async (prevId, difficulty, topic) => {
   
   if (difficulty) {
     conditions["difficulty"] = difficulty
-  }
-  
-  if (topic) {
-    conditions["topics"] = topic
   }
 
   // get filtered questions

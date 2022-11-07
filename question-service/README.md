@@ -10,23 +10,29 @@
 
 ## API Endpoints
 
-### Get all questions: `GET /api/question/`
+### **Get all questions: `GET /api/question/`**
 Returns a list of all existing questions.
 
-### Get specified question: `GET /api/question/id`
-Returns the question specified by `id` in the request body.
+### **Get specified question: `GET /api/question/:id`**
+Returns the question specified by `id` in the request parameters.
 
-Body:
-| Key | Description |
-|-----|-------|
-id    |ID of the question of interest|
+**Request Parameters:**
+| Key | Description                    |
+| --- | ------------------------------ |
+| id  | ID of the question of interest |
 
-### Get specified question: `GET /api/question/random`
-Returns a random question. Returned question can be further specified by optional values in the request body.
+### **Get specified question: `GET /api/question/random`**
+Returns a random question. Returned question can be further specified by optional values in the request query parameters.
 
-Body:
-| Key | Description |
-|-----|-------|
-prevId    |ID of the previous question, provide to not return the same question in the subsequent call|
-difficulty | Difficulty level of the returned question. Supported values: `[0, 1, 2]`
-topic | Topic of interest of the returned question. Supported values: `["array"]`
+**Request Query Parameters:**
+| Key        | Description                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| prevId     | ID of the previous question, provide to not return the same question in the subsequent call |
+| difficulty | Difficulty level of the returned question. Supported values: `[0, 1, 2]`                    |
+
+**Example Queries:**
+| Query                                                                   | Explanation                                                                                              |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `GET /api/question/random`                                              | Get a random question without any condition                                                              |
+| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d`              | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`                              |
+| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d&difficulty=1` | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`, and has `difficulty` of `1` |
