@@ -12,13 +12,14 @@ export default function MatchedPage() {
 	const navigate = useNavigate();
 	const location = useLocation();
   const difficulty = location.state.difficulty;
+  const roomID = location.state.roomID;
 
   const backButton = () => {
     navigate("/matching", { state : { difficulty: difficulty }});
   }
 
   const toTPage = () => {
-    navigate("/testpage", { state : { difficulty: difficulty }});
+    navigate("/testpage", { state : { difficulty: difficulty, roomID: roomID }});
   }
 
   return (

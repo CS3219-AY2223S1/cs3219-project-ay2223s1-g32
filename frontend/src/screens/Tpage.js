@@ -25,7 +25,7 @@ function Collab() {
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
   const difficulty = location.state.difficulty;
-  const roomID = 1;
+  const roomID = location.state.roomID;
   const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
   const [EditorRef, setEditorRef] = React.useState(null);
   const [code, setCode] = React.useState("");

@@ -13,7 +13,7 @@ export default function MatchingPage() {
   const timerRef = React.useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = React.useState("");
+  const [roomID, setRoomID] = React.useState(0);
   const difficulty = location.state.difficulty;
   const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
 
@@ -30,9 +30,10 @@ export default function MatchingPage() {
     console.log(response); // false
   });
 
-  socket.on("SuccessMatched", (response) => {
+  socket.on("SuccessMatched", (response, roomID) => {
     console.log(response); // false
-    navigate("/matched", { state : { difficulty: difficulty }});
+    setRoomID(roomID);
+    navigate("/matched", { state : { difficulty: difficulty, roomID: roomID }});
   });
 
   socket.on("Error", (response) => {
@@ -73,8 +74,6 @@ export default function MatchingPage() {
 
     timerRef.current = window.setTimeout(() => {
       setQuery("success");
-      //navigate("/matched", { state : { difficulty: difficulty }});
-    //}, 30000);
     }, 30000);
   };
 

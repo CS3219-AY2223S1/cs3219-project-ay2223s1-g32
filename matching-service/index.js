@@ -8,7 +8,6 @@ import {
   getMatchUsername,
   getMatchDifficulty,
 } from "../user-service/model/repository.js";
-import { setTimeout } from "timers";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -22,6 +21,7 @@ const io = new Server(httpServer, {
     credentials: true
   }
 });
+var roomID = 1;
 
 app.get("/", (req, res) => {
   res.send("Hello World from matching-service");
@@ -44,10 +44,11 @@ io.on("connection", (socket) => {
 
     if (!userInQueue && matchedUser) {
       deleteMatch(matchedUser);
-      socket.emit("SuccessMatched", "Match with same difficulty found.");
+      socket.emit("SuccessMatched", "Match with same difficulty found.", roomID);
       io.to(matchedUser["socketId"]).emit(
         "Success",
-        "Match with same difficulty found."
+        "Match with same difficulty found.",
+        roomID,
       );
       return;
     } else if (!userInQueue) {
@@ -57,7 +58,8 @@ io.on("connection", (socket) => {
       const interval = setInterval(async () => {
         const userStillInQueue = await getMatchUsername(username);
         if (!userStillInQueue) {
-          socket.emit("SuccessMatched", "Match with same difficulty found.");
+          socket.emit("SuccessMatched", "Match with same difficulty found.", roomID);
+          roomID++;
           clearInterval(interval);
         }
         count++;
