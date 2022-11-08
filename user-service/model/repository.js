@@ -1,9 +1,8 @@
-import UserModel from './user-model.js';
-import MatchRequestModel from './match-request-model.js';
-import BlacklistedTokenModel from './blacklisted-token-model.js';
-import 'dotenv/config';
-import * as bcrypt from 'bcrypt';
-import jsonwebtoken from 'jsonwebtoken';
+import UserModel from "./user-model.js";
+import BlacklistedTokenModel from "./blacklisted-token-model.js";
+import "dotenv/config";
+import * as bcrypt from "bcrypt";
+import jsonwebtoken from "jsonwebtoken";
 
 //Set up mongoose connection
 import mongoose from "mongoose";
@@ -18,12 +17,8 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-export async function createUser(params) { 
+export async function createUser(params) {
   return new UserModel(params);
-}
-
-export async function createMatchRequest(params) {
-  return new MatchRequestModel(params);
 }
 
 export async function updateUser(id, params) {
@@ -37,24 +32,6 @@ export async function deleteUser(id) {
 export async function getUser(username) {
   const existingUser = await UserModel.findOne({ username: username });
   return existingUser;
-}
-
-export async function deleteMatch(username) {
-  await MatchRequestModel.findByIdAndRemove(username);
-}
-
-export async function getMatchUsername(username) {
-  const existingMatchRequest = await MatchRequestModel.findOne({
-    username: username,
-  });
-  return existingMatchRequest;
-}
-
-export async function getMatchDifficulty(difficulty) {
-  const existingMatchRequest = await MatchRequestModel.findOne({
-    difficulty: difficulty,
-  });
-  return existingMatchRequest;
 }
 
 export async function getHashedPassword(password) {
@@ -71,23 +48,28 @@ export async function isValidLogin(username, password) {
   return isValidLogin;
 }
 
-export async function createBlacklistedToken(params) { 
+export async function createBlacklistedToken(params) {
   return new BlacklistedTokenModel(params);
 }
 
 export async function getBlacklistedToken(token) {
-  const blacklistedToken = await BlacklistedTokenModel.findOne({ token: token });
+  const blacklistedToken = await BlacklistedTokenModel.findOne({
+    token: token,
+  });
   return blacklistedToken;
 }
 
 export async function getUserToken(username) {
   const user = await getUser(username);
-  const token = jsonwebtoken.sign({ username: username, id: user.id }, process.env.SECRET);
+  const token = jsonwebtoken.sign(
+    { username: username, id: user.id },
+    process.env.SECRET
+  );
   return token;
 }
 
 export function getRequestToken(token) {
-  const bearer = 'bearer ';
+  const bearer = "bearer ";
   console.log("TOKEN" + token);
 
   return token && token.toLowerCase().startsWith(bearer)
@@ -102,12 +84,12 @@ export async function getTokenUser(token) {
       : null;
     const isBlacklistedToken = await getBlacklistedToken(token);
 
-    const user = decodedToken && !isBlacklistedToken
-      ? await UserModel.findById(decodedToken.id)
-      : null;
+    const user =
+      decodedToken && !isBlacklistedToken
+        ? await UserModel.findById(decodedToken.id)
+        : null;
 
     return user;
-    
   } catch (error) {
     return null;
   }
