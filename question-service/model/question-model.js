@@ -12,7 +12,8 @@ let QuestionModelSchema = new Schema({
       required: true
     },
     difficulty: {
-        type: Number,
+        type: String,
+        enum : ['Easy', 'Medium', 'Hard'],
         required: true,
     },
     topics: {
