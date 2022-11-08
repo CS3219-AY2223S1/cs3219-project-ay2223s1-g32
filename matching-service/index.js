@@ -2,12 +2,12 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { ormCreateMatchRequest } from "../user-service/model/match-request-model-orm.js";
+import { ormCreateMatchRequest } from "./model/match-request-model-orm.js";
 import {
   deleteMatch,
   getMatchUsername,
   getMatchDifficulty,
-} from "../user-service/model/repository.js";
+} from "./model/repository.js";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -18,8 +18,8 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 var roomID = 1;
 
@@ -44,11 +44,15 @@ io.on("connection", (socket) => {
 
     if (!userInQueue && matchedUser) {
       deleteMatch(matchedUser);
-      socket.emit("SuccessMatched", "Match with same difficulty found.", roomID);
+      socket.emit(
+        "SuccessMatched",
+        "Match with same difficulty found.",
+        roomID
+      );
       io.to(matchedUser["socketId"]).emit(
         "Success",
         "Match with same difficulty found.",
-        roomID,
+        roomID
       );
       return;
     } else if (!userInQueue) {
@@ -58,15 +62,19 @@ io.on("connection", (socket) => {
       const interval = setInterval(async () => {
         const userStillInQueue = await getMatchUsername(username);
         if (!userStillInQueue) {
-          socket.emit("SuccessMatched", "Match with same difficulty found.", roomID);
+          socket.emit(
+            "SuccessMatched",
+            "Match with same difficulty found.",
+            roomID
+          );
           roomID++;
           clearInterval(interval);
         }
         count++;
-        if(count == 30 && userStillInQueue) {
+        if (count == 30 && userStillInQueue) {
           await deleteMatch(userStillInQueue);
           socket.emit("TimeoutError", "Match not found in 30s");
-          clearInterval(interval); 
+          clearInterval(interval);
         }
       }, 1000);
     } else {
