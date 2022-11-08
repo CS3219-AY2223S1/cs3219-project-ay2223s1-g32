@@ -35,8 +35,8 @@ loginRouter.post('/', loginUser)
 logoutRouter.post('/', logoutUser)
 
 app.use('/api/user', userRouter).all((_, res) => {
-    res.setHeader('Content-Content', 'application/json')
-    res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Content-Content', 'application/json')
+  res.setHeader('Access-Control-Allow-Origin', '*')
 })
 
 app.use('/api/login', loginRouter).all((_, res) => {
