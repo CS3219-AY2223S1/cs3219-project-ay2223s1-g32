@@ -28,11 +28,11 @@ Returns a random question. Returned question can be further specified by optiona
 | Key        | Description                                                                                 |
 | ---------- | ------------------------------------------------------------------------------------------- |
 | prevId     | ID of the previous question, provide to not return the same question in the subsequent call |
-| difficulty | Difficulty level of the returned question. Supported values: `[0, 1, 2]`                    |
+| difficulty | Difficulty level of the returned question. Supported values: `["Easy", "Medium", "Hard"]`   |
 
 **Example Queries:**
-| Query                                                                   | Explanation                                                                                              |
-| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `GET /api/question/random`                                              | Get a random question without any condition                                                              |
-| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d`              | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`                              |
-| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d&difficulty=1` | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`, and has `difficulty` of `1` |
+| Query                                                                      | Explanation                                                                                                 |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `GET /api/question/random`                                                 | Get a random question without any condition                                                                 |
+| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d`                 | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`                                 |
+| `GET /api/question/random?prevId=634ac4b53f53e338055aae9d&difficulty=Easy` | Get a random question that does not have `id` of `634ac4b53f53e338055aae9d`, and has `difficulty` of `Easy` |

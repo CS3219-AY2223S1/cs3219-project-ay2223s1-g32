@@ -9,10 +9,10 @@
 
 ## API Endpoints
 
-### **Get all questions: `GET /api/history/`**
+### **Get all histories: `GET /api/history/`**
 Returns a list of all existing histories.
 
-### **Get specified question: `GET /api/history/:id`**
+### **Get specified history: `GET /api/history/:id`**
 Returns the history specified by `id` in the request parameter.
 
 Request Parameters:
@@ -20,7 +20,7 @@ Request Parameters:
 | --- | ----------------------------- |
 | id  | ID of the history of interest |
 
-### **Get history for specified user: `GET /api/user/:userId`**
+### **Get history for specified user: `GET /api/history/user/:userId`**
 Returns all history records pertaining to the specified user.
 
 Request Parameters:
@@ -38,3 +38,19 @@ Request Body:
 | collaborator | Name of the user's collaborator. Required field.                 |
 | question     | Name of the attempted question. Required field.                  |
 | content      | Code content submitted for the question attempt. Optional field. |
+
+### **Delete specified history: `DELETE /api/history/:id`**
+Returns the history specified by `id` in the request parameter.
+
+Request Parameters:
+| Key | Description                   |
+| --- | ----------------------------- |
+| id  | ID of the history of interest |
+
+### **Delete history for specified user: `DELETE /api/history/user/:userId`**
+Returns all history records pertaining to the specified user.
+
+Request Parameters:
+| Key    | Description                |
+| ------ | -------------------------- |
+| userId | ID of the user of interest |
