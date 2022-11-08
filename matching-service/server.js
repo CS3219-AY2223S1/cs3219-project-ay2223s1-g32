@@ -39,6 +39,11 @@ io.on("connection", (socket) => {
     console.log("coding event");
     socket.broadcast.to(data.roomID).emit("receive code", data);
   });
+
+  socket.on("set question", function (data) {
+    console.log("set question");
+    socket.broadcast.to(data.roomID).emit("set question", data);
+  });
 });
 
 io.on("disconnect", (evt) => {

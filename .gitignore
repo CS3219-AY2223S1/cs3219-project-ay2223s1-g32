@@ -5,3 +5,4 @@ matching-service/node_modules/@socket.io/component-emitter/index.d.ts
 matching-service/node_modules/
 frontend/node_modules/
 user-service/node_modules/
+node_modules/
