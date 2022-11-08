@@ -4,12 +4,10 @@ import { Box } from "@mui/system";
 
 function QuestionHistory() {
 	const [userHistory, setUserHistory] = React.useState([]);
+  const userId = document.cookie.split('; ').find((row) => row.startsWith('userId=')).split('=')[1];
   React.useEffect(() => {
-		// axios
-		//   .get("http://localhost:8002/api/history/")
-		//   .then((resp) => setUserHistory(resp.data[1]));
 		axios
-		  .get("http://localhost:8005/api/history/") //TODO: change to pull from particular userID
+		  .get(`http://localhost:8005/api/history/user/${userId}`)
 		  .then((resp) => {
 				console.log("line 13" + JSON.stringify(resp.data));
 				setUserHistory(resp.data);
