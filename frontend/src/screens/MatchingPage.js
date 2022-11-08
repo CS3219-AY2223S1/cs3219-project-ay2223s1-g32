@@ -50,13 +50,16 @@ export default function MatchingPage() {
 
   React.useEffect(() =>
     () => {
-      if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
-        console.log("document cookie is not null");
-        console.log(JSON.stringify(document.cookie));
-        setIsValidUser(true);
-      }
       clearTimeout(timerRef.current);
     },[]);
+
+  React.useEffect(() => {
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      console.log("document cookie is not null");
+      console.log(JSON.stringify(document.cookie));
+      setIsValidUser(true);
+    }
+  }, []);
 
   const handleClickQuery = () => {
     console.log("username: " + username);
