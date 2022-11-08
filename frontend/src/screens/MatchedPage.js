@@ -13,12 +13,8 @@ import "../components/selectDifficulty/styles.css";
 export default function MatchedPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  // const difficulty = location.state.difficulty;
-  // const roomID = location.state.roomID;
-  const difficulty = "Easy";
-  // location.state.difficulty;
-  const roomID = 1;
-  // document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const difficulty = location.state.difficulty;
+  const roomID = location.state.roomID;
 
   const backButton = () => {
     navigate("/matching", { state: { difficulty: difficulty } });

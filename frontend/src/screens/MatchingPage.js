@@ -106,50 +106,52 @@ export default function MatchingPage() {
   return (
     <>
       <TopNavBar />
-      <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        <Box sx={{ height: 40 }}>
-          <Dialog
-            open={isDialogOpen}
-            onClose={closeDialog}
-          >
-            <DialogTitle>{dialogTitle}</DialogTitle>
-            <DialogContent>
-              <DialogContentText>{dialogMsg}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeDialog}>Close</Button>
-            </DialogActions>
-          </Dialog>
-          {query === "success" ? (
-            <Typography>Success in finding you a coding comrade!</Typography>
-          ) :
-            query === "failed" ? (
-              <Typography>Failed this time in finding you a suitable comrade. Please try again!</Typography>
-            ) : (
-              <Fade
-                in={query === "progress"}
-                style={{
-                  transitionDelay: query === "progress" ? "800ms" : "0ms",
-                }}
-                unmountOnExit
-              >
-                <CircularProgress />
-              </Fade>
-            )}
-        </Box>
-        <Components.MatchingButton onClick={handleClickQuery} sx={{ m: 2 }}>
-          {query == "progress" ? "Stop Matching" : query == "failed" ? "Try Again" : "Start Matching"}
-        </Components.MatchingButton>
-        <div>
+      <Components.TinyContainer>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        >
           <Box sx={{ height: 40 }}>
-            <Link to="/selectdifficulty">
-              <Components.MatchingGhostButton>Change difficulty</Components.MatchingGhostButton>
-            </Link>
+            <Dialog
+              open={isDialogOpen}
+              onClose={closeDialog}
+            >
+              <DialogTitle>{dialogTitle}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>{dialogMsg}</DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={closeDialog}>Close</Button>
+              </DialogActions>
+            </Dialog>
+            {query === "success" ? (
+              <Typography>Success in finding you a coding comrade!</Typography>
+            ) :
+              query === "failed" ? (
+                <Typography>Failed this time in finding you a suitable comrade. Please try again!</Typography>
+              ) : (
+                <Fade
+                  in={query === "progress"}
+                  style={{
+                    transitionDelay: query === "progress" ? "800ms" : "0ms",
+                  }}
+                  unmountOnExit
+                >
+                  <CircularProgress />
+                </Fade>
+              )}
           </Box>
-        </div>
-      </Box>
+          <Components.MatchingButton onClick={handleClickQuery} sx={{ m: 2 }}>
+            {query == "progress" ? "Stop Matching" : query == "failed" ? "Try Again" : "Start Matching"}
+          </Components.MatchingButton>
+          <div>
+            <Box sx={{ height: 40 }}>
+              <Link to="/selectdifficulty">
+                <Components.MatchingGhostButton>Change difficulty</Components.MatchingGhostButton>
+              </Link>
+            </Box>
+          </div>
+        </Box>
+      </Components.TinyContainer>
     </>
   );
 }

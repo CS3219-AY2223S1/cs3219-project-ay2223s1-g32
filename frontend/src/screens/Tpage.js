@@ -132,7 +132,7 @@ function Collab() {
           width: "100%",
           fontSize: "20px",
           overflowY: "auto",
-          marginTop: "20px",
+          marginTop: "40px",
         }}
       >
         <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>

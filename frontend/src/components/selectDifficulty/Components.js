@@ -32,16 +32,36 @@ export const MatchedPara = styled.h4`
   font-weight: 400;
 `;
 
-export const Container = styled.div`
-  background-color: #fff;
+export const TinyContainer = styled.div`
+  background-color: transparent;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px #2d73c3, 0 10px 10px #2d73c3;
   position: relative;
   overflow: hidden;
-  width: 900px;
+  width: 450px;
   max-width: 100%;
-  min-height: 470px;
+  min-height: 280px;
   align-self: center;
+  align-items:center;
+  padding: 50px;
+  margin-top:130px;
+  justifyContent: center;
+`;
+
+export const Container = styled.div`
+  background-color: transparent;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px #2d73c3, 0 10px 10px #2d73c3;
+  position: relative;
+  overflow: hidden;
+  width: 550px;
+  max-width: 100%;
+  min-height: 400px;
+  align-self: center;
+  align-items:center;
+  padding: 50px;
+  margin-top:160px;
+  justifyContent: center;
 `;
 
 export const CenterContainer = styled.div`
@@ -87,6 +107,7 @@ export const Button = styled.button`
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+  align-self:center;
   &:active {
     transform: scale(0.95);
   }
@@ -97,9 +118,11 @@ export const Button = styled.button`
 
 export const GhostButton = styled(Button)`
   background-color: transparent;
-  border-color: #ffffff;
-  position: absolute;
-  top: 315px;
+  border-radius: 20px;
+  border: 1px solid #2d73c3;
+  color: #2d73c3;
+  margin-top:10px;
+  margin-left:110px;
 `;
 
 
@@ -132,5 +155,5 @@ export const MatchingGhostButton = styled(MatchingButton)`
   border-radius: 20px;
   border: 1px solid #2d73c3;
   color: #2d73c3;
-  margin-top:10px;
+  margin-top:20px;
 `;
