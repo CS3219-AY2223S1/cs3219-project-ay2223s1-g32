@@ -4,9 +4,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import TopNavBar from '../components/TopNavBar.js';
-import ChangePassword from "../components/ChangePassword.js"
-import DeleteAccount from '../components/DeleteAccount.js';
+import TopNavBar from '../components/navBar/TopNavBar.js';
+import ChangePassword from "../components/navBar/ChangePassword.js"
+import DeleteAccount from '../components/navBar/DeleteAccount.js';
 import QuestionHistory from '../components/QuestionHistory.js';
 
 function TabPanel(props) {
@@ -51,32 +51,32 @@ export default function AccountSettings() {
 
   return (
     <>
-    <TopNavBar  />
-    <Box
-      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: document.documentElement.scrollHeight }}
-    >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: 'divider' }}
+      <TopNavBar />
+      <Box
+        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
       >
-        <Tab label="Update/Change Password" {...a11yProps(0)} />
-        <Tab label="Delete Account" {...a11yProps(1)} />
-        <Tab label="Question History" {...a11yProps(2)} />
-      </Tabs>
-      <TabPanel value={value} index={0} >
-        <ChangePassword  />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <DeleteAccount  />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <QuestionHistory />
-      </TabPanel>
-    </Box>
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          sx={{ borderRight: 1, borderColor: 'divider' }}
+        >
+          <Tab label="Update/Change Password" {...a11yProps(0)} />
+          <Tab label="Delete Account" {...a11yProps(1)} />
+          <Tab label="Question History" {...a11yProps(2)} />
+        </Tabs>
+        <TabPanel value={value} index={0} >
+          <ChangePassword />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <DeleteAccount />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <QuestionHistory />
+        </TabPanel>
+      </Box>
     </>
   );
 }

@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import TopNavBar from "../components/TopNavBar";
+import TopNavBar from "../components/navBar/TopNavBar";
 import ChatRoom from "../components/src/ChatRoom/ChatRoom";
 import { Alert, Box, Button } from "@mui/material";
 import { CodemirrorBinding } from "y-codemirror";

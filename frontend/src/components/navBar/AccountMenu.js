@@ -13,8 +13,8 @@ import {
   ListItemIcon,
   IconButton
 } from "@mui/material";
-import { LOGOUT_USER_SVC } from "../configs";
-import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../constants";
+import { LOGOUT_USER_SVC } from "../../configs";
+import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../../constants";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
@@ -37,26 +37,26 @@ export default function AccountMenu() {
     const res = await fetch(LOGOUT_USER_SVC, {
       method: 'POST',
       headers: {
-          'Authorization': `Bearer ${userAuthToken}`,
-          'accept': 'application/json',
-          'Content-Type': 'application/json'
+        'Authorization': `Bearer ${userAuthToken}`,
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
       }
-  })
-      .then(res => 
-        {
-          if (res && res.status === STATUS_CODE_SUCCESS) {
-              setIsLogoutSuccess(true);
-              navigate("/");
-        }})
-      .catch (err => {
+    })
+      .then(res => {
+        if (res && res.status === STATUS_CODE_SUCCESS) {
+          setIsLogoutSuccess(true);
+          navigate("/");
+        }
+      })
+      .catch(err => {
         if (err.response.status === STATUS_CODE_FAILED) {
-                setErrorDialog(err.response.data.message);
-              } else {
-                setErrorDialog('Please try again later')
-              }
+          setErrorDialog(err.response.data.message);
+        } else {
+          setErrorDialog('Please try again later')
+        }
       });
   }
-  
+
   const closeDialog = () => setIsDialogOpen(false)
 
   const setErrorDialog = (msg) => {
@@ -74,20 +74,20 @@ export default function AccountMenu() {
   };
   return (
     <React.Fragment>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="medium"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <Avatar sx={{ bgcolor: green[300], width: 56, height: 56 }}>
+      <Tooltip title="Account settings">
+        <IconButton
+          onClick={handleClick}
+          size="medium"
+          sx={{ ml: 2 }}
+          aria-controls={open ? 'account-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <Avatar sx={{ bgcolor: green[300], width: 56, height: 56 }}>
             <ManageAccountsIcon />
-            </Avatar>
-          </IconButton>
-        </Tooltip>
+          </Avatar>
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -130,11 +130,11 @@ export default function AccountMenu() {
           <Avatar /> My account
         </MenuItem>
         <Divider /> */}
-        <MenuItem onClick={() => {navigate('/account/settings')}}>
+        <MenuItem onClick={() => { navigate('/account/settings') }}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-            Account Settings
+          Account Settings
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
@@ -144,19 +144,19 @@ export default function AccountMenu() {
         </MenuItem>
       </Menu>
       <Dialog
-          open={isDialogOpen}
-          onClose={closeDialog}
-        >
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>{dialogMsg}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            {!isLogoutSuccess
-              ? <Button onClick={closeDialog}>Close</Button> : <></>
-            }
-          </DialogActions>
-        </Dialog>
+        open={isDialogOpen}
+        onClose={closeDialog}
+      >
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{dialogMsg}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {!isLogoutSuccess
+            ? <Button onClick={closeDialog}>Close</Button> : <></>
+          }
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }

@@ -13,7 +13,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import TopNavBar from '../components/TopNavBar.js';
+import TopNavBar from '../components/navBar/TopNavBar.js';
+import * as Components from "../components/selectDifficulty/Components";
+import "../components/selectDifficulty/styles.css";
 
 export default function MatchingPage() {
   const [query, setQuery] = React.useState("idle");
@@ -85,11 +87,14 @@ export default function MatchingPage() {
     });
 
     timerRef.current = window.setTimeout(() => {
-      setQuery("success");
+      setQuery("failed");
     }, 30000);
   };
 
-  const closeDialog = () => setIsDialogOpen(false)
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setQuery("failed");
+  }
 
   const setErrorDialog = (msg) => {
     setIsDialogOpen(true)
@@ -118,31 +123,29 @@ export default function MatchingPage() {
             </DialogActions>
           </Dialog>
           {query === "success" ? (
-            <Typography>Success!</Typography>
-          ) : (
-            <Fade
-              in={query === "progress"}
-              style={{
-                transitionDelay: query === "progress" ? "800ms" : "0ms",
-              }}
-              unmountOnExit
-            >
-              <CircularProgress />
-            </Fade>
-          )}
+            <Typography>Success in finding you a coding comrade!</Typography>
+          ) :
+            query === "failed" ? (
+              <Typography>Failed this time in finding you a suitable comrade. Please try again!</Typography>
+            ) : (
+              <Fade
+                in={query === "progress"}
+                style={{
+                  transitionDelay: query === "progress" ? "800ms" : "0ms",
+                }}
+                unmountOnExit
+              >
+                <CircularProgress />
+              </Fade>
+            )}
         </Box>
-        <Button onClick={handleClickQuery} sx={{ m: 2 }}>
-          {query !== "idle" ? "Stop Matching" : "Start Matching"}
-        </Button>
+        <Components.MatchingButton onClick={handleClickQuery} sx={{ m: 2 }}>
+          {query == "progress" ? "Stop Matching" : query == "failed" ? "Try Again" : "Start Matching"}
+        </Components.MatchingButton>
         <div>
           <Box sx={{ height: 40 }}>
-            <Link to="/login">
-              <Button variant="outlined">Go Home</Button>
-            </Link>
-          </Box>
-          <Box sx={{ height: 40 }}>
             <Link to="/selectdifficulty">
-              <Button variant="outlined">Change difficulty</Button>
+              <Components.MatchingGhostButton>Change difficulty</Components.MatchingGhostButton>
             </Link>
           </Box>
         </div>

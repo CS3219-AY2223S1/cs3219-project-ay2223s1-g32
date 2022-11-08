@@ -36,7 +36,6 @@ function UserAuthPage() {
                     document.cookie = "authToken=" + res.data.token;
                     document.cookie = "username=" + res.data.username;
                     document.cookie = "userId=" + res.data.id;
-                    console.log("HEHRHE")
                     setIsLoginSuccess(true)
                     redirect("/selectdifficulty");
                 }

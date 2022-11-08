@@ -6,30 +6,43 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useNavigate, useLocation } from "react-router-dom";
-import TopNavBar from "../components/TopNavBar";
+import TopNavBar from "../components/navBar/TopNavBar";
+import * as Components from "../components/selectDifficulty/Components";
+import "../components/selectDifficulty/styles.css";
 
 export default function MatchedPage() {
-	const navigate = useNavigate();
-	const location = useLocation();
-  const difficulty = location.state.difficulty;
-  const roomID = location.state.roomID;
+  const navigate = useNavigate();
+  const location = useLocation();
+  // const difficulty = location.state.difficulty;
+  // const roomID = location.state.roomID;
+  const difficulty = "Easy";
+  // location.state.difficulty;
+  const roomID = 1;
+  // document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
 
   const backButton = () => {
-    navigate("/matching", { state : { difficulty: difficulty }});
+    navigate("/matching", { state: { difficulty: difficulty } });
   }
 
   const toTPage = () => {
-    navigate("/testpage", { state : { difficulty: difficulty, roomID: roomID }});
+    navigate("/testpage", { state: { difficulty: difficulty, roomID: roomID } });
   }
 
   return (
     <>
-    <TopNavBar  />
-    <h1 style={{fontSize: 28, textAlign: "center"}}>Congratulations!</h1>
-    <h1 style={{fontSize: 18, textAlign: "center"}}>You have been matched with a user.</h1>
-		<h1 style={{marginBottom: 20, fontSize: 18, textAlign: "center"}}>Difficulty level: {difficulty}</h1>
-    <Button onClick={toTPage} style={{width: 200, marginTop: 10, alignSelf: "center"}}>Start Coding</Button>
-		<Button onClick={backButton} style={{width: 100, marginTop: 10, alignSelf: "center"}}>Go back</Button>
+      <TopNavBar />
+      <Components.CenterContainer>
+        <Components.MatchedTitle>Congratulations!</Components.MatchedTitle>
+        <Components.MatchedPara>You have been matched with a user.</Components.MatchedPara>
+        <Components.MatchedPara>Difficulty level: {difficulty}</Components.MatchedPara>
+        <Box sx={{
+          display: 'flex'
+        }}
+          flexDirection={"column"} justifyContent={'center'} alignSelf={'center'} >
+          <Components.MatchingGhostButton onClick={toTPage} >Start Coding</Components.MatchingGhostButton>
+          <Components.MatchingGhostButton onClick={backButton}>Go back</Components.MatchingGhostButton>
+        </Box>
+      </Components.CenterContainer>
     </>
   );
 }
