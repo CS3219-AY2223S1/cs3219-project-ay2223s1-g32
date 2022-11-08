@@ -12,16 +12,17 @@ import { WebrtcProvider } from "y-webrtc";
 import "./Editor.css";
 import RandomColor from "randomcolor";
 import "./EditorAddons";
-const socket = io("http://localhost:3001/", {
+const socket = io("http://localhost:8001/", {
   autoConnect: true,
   withCredentials: true,
 });
 
 function Collab() {
-  socket.on("receive code", (payload) => {
-    console.log(JSON.stringify(payload));
-    setCode(payload.code);
+  socket.on("set question", (payload) => {
+    console.log("TPAGE", JSON.stringify(payload));
+    setQuestion(payload.question);
   });
+  
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
   const difficulty = location.state.difficulty;
@@ -33,15 +34,21 @@ function Collab() {
   React.useEffect(() => {
     socket.emit("room", { roomID: roomID });
     axios
-      .get("http://localhost:8002/api/question/")
-      .then((resp) => setQuestion(resp.data[1]));
+      .get("http://localhost:8002/api/question/random")
+      .then((resp) => {
+        const q = resp.data 
+        socket.emit("set question", { roomID, question: q })
+      });
 
+
+      
     return () => {
       socket.emit("leave room", {
         roomID: roomID,
       });
     };
   }, []);
+  
   const handleEditorDidMount = (editor) => {
     setEditorRef(editor);
   };
