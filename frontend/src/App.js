@@ -4,8 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import SignupPage from "./screens/SignupPage";
-import LoginPage from "./screens/LoginPage";
+import UserAuthPage from "./screens/UserAuthPage";
 import SelectDifficultyPage from "./screens/SelectDifficultyPage";
 import MatchingPage from "./screens/MatchingPage";
 import AccountSettings from "./screens/AccountSettings";
@@ -25,12 +24,10 @@ function App() {
             <Route
               exact
               path="/"
-              element={<Navigate replace to="/signup" />}
+              element={<Navigate replace to="/register-login" />}
             ></Route>
-            {/* <Route path="/homepage" element={<Homepage/>}/> */}
+            <Route path="/register-login" element={<UserAuthPage />} />
             <Route path="/account/settings" element={<AccountSettings />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
             <Route
               path="/selectdifficulty"
               element={<SelectDifficultyPage />}
