@@ -10,12 +10,11 @@ import {
     DialogContentText,
     DialogTitle,
 } from "@mui/material";
-import {useState} from "react";
-import axios from "axios";
-import {LOGIN_USER_SVC} from "../configs";
-import {STATUS_CODE_FAILED, STATUS_CODE_SUCCESS} from "../constants";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../constants";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as React from "react";
+import useAuth from "../useAuth";
 
 function LoginPage() {
     const [username, setUsername] = useState("")
@@ -27,25 +26,26 @@ function LoginPage() {
 
     const redirect = useNavigate() // re-direct api
 
-    const handleLogin = async () => {
-        const res = await axios.post(LOGIN_USER_SVC, { username, password })
-            .catch((err) => {
-                if (err.response.status === STATUS_CODE_FAILED) {
-                    setErrorDialog(err.response.data.message);
+    const { login } = useAuth();
+    const { state } = useLocation();
+
+    const handleLogin = () => {
+        login(username, password)
+            .then(res => {
+                if (res && res.status === STATUS_CODE_SUCCESS) {
+                    // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
+                    document.cookie = "authToken=" + res.data.token;
+                    document.cookie = "username=" + res.data.username;
+                    document.cookie = "userId=" + res.data.id;
+                    setIsLoginSuccess(true)
+                    redirect(state?.path || "/selectdifficulty");
+                } else if (res.status === STATUS_CODE_FAILED) {
+                    setErrorDialog(res.data.message);
                 } else {
                     setErrorDialog('Please try again later')
                 }
-            })
-        if (res && res.status === STATUS_CODE_SUCCESS) {
-            // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
-            document.cookie="authToken=" + res.data.token;
-            document.cookie="username=" + res.data.username;
-            document.cookie="userId=" + res.data.id;
-            setIsLoginSuccess(true)
-            redirect("/selectdifficulty");
-        }
-    }
-
+            });
+    };
 
     const handleSignUpNav = async () => {
         redirect("/signup");
@@ -67,7 +67,7 @@ function LoginPage() {
                 variant="standard"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                sx={{marginBottom: "1rem"}}
+                sx={{ marginBottom: "1rem" }}
                 autoFocus
             />
             <TextField
@@ -76,15 +76,15 @@ function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                sx={{marginBottom: "2rem"}}
+                sx={{ marginBottom: "2rem" }}
             />
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}> 
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleLogin}>Log In</Button>
             </Box>
-            <Link underline="hover" justifyContent={"flex-start"} 
-            sx={{marginTop: "-2.2rem"}}
-            alignSelf={"flex-start"}
-            onClick={handleSignUpNav}>
+            <Link underline="hover" justifyContent={"flex-start"}
+                sx={{ marginTop: "-2.2rem" }}
+                alignSelf={"flex-start"}
+                onClick={handleSignUpNav}>
                 {'No existing account? Sign up here.'}
             </Link>
             <Dialog

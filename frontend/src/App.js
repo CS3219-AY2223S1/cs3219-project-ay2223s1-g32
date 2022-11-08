@@ -15,6 +15,7 @@ import ChatPage from "./components/ChatPage";
 import ChatPage2 from "./components/ChatPage2";
 import { Box } from "@mui/material";
 import React from "react";
+import RequireAuth from "./useAuth";
 
 function App() {
   return (
@@ -28,18 +29,45 @@ function App() {
               element={<Navigate replace to="/signup" />}
             ></Route>
             {/* <Route path="/homepage" element={<Homepage/>}/> */}
-            <Route path="/account/settings" element={<AccountSettings />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/account/settings" element={
+              <RequireAuth>
+                <AccountSettings />
+              </RequireAuth>
+            } />
             <Route
               path="/selectdifficulty"
-              element={<SelectDifficultyPage />}
-            />
-            <Route path="/matching" element={<MatchingPage />} />
-            <Route path="/matched" element={<MatchedPage />} />
-            <Route path="/testpage" element={<Collab />} />
-            <Route path="/chatpage" element={<ChatPage />} />
-            <Route path="/chatpage2" element={<ChatPage2 />} />
+              element={
+                <RequireAuth>
+                  <SelectDifficultyPage />
+                </RequireAuth>
+              } />
+            <Route path="/matching" element={
+              <RequireAuth>
+                <MatchingPage />
+              </RequireAuth>
+            } />
+            <Route path="/matched" element={
+              <RequireAuth >
+                <MatchedPage />
+              </RequireAuth>
+            } />
+            <Route path="/testpage" element={
+              <RequireAuth >
+                <Collab />
+              </RequireAuth>
+            } />
+            <Route path="/chatpage" element={
+              <RequireAuth >
+                <ChatPage />
+              </RequireAuth>
+            } />
+            <Route path="/chatpage2" element={
+              <RequireAuth >
+                <ChatPage2 />
+              </RequireAuth>
+            } />
           </Routes>
         </Router>
       </Box>
