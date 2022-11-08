@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../constants";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as React from "react";
-import useAuth from "../useAuth";
+import { useAuth } from "../useAuth";
 
-function LoginPage() {
+const LoginPage = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -27,24 +27,29 @@ function LoginPage() {
     const redirect = useNavigate() // re-direct api
 
     const { login } = useAuth();
-    const { state } = useLocation();
 
     const handleLogin = () => {
         login(username, password)
-            .then(res => {
-                if (res && res.status === STATUS_CODE_SUCCESS) {
-                    // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
-                    document.cookie = "authToken=" + res.data.token;
-                    document.cookie = "username=" + res.data.username;
-                    document.cookie = "userId=" + res.data.id;
-                    setIsLoginSuccess(true)
-                    redirect(state?.path || "/selectdifficulty");
-                } else if (res.status === STATUS_CODE_FAILED) {
-                    setErrorDialog(res.data.message);
-                } else {
-                    setErrorDialog('Please try again later')
+            .then(
+                function (res) {
+                    if (res && res.status === STATUS_CODE_SUCCESS) {
+                        // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
+                        document.cookie = "authToken=" + res.data.token;
+                        document.cookie = "username=" + res.data.username;
+                        document.cookie = "userId=" + res.data.id;
+                        document.cookie = "userAuthed=" + 'true';
+                        setIsLoginSuccess(true);
+                        redirect("/selectdifficulty");
+                    }
+                },
+                function (error) {
+                    if (error.status === STATUS_CODE_FAILED) {
+                        setErrorDialog(error.message);
+                    } else {
+                        setErrorDialog('Please try again later')
+                    }
                 }
-            });
+            );
     };
 
     const handleSignUpNav = async () => {

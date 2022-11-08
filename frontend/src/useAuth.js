@@ -1,25 +1,29 @@
 import * as React from "react";
 import axios from "axios";
 import { LOGIN_USER_SVC, LOGOUT_USER_SVC } from "./configs";
-import { Navigate, useLocation } from "react-router-dom";
 
 const authContext = React.createContext();
 
-function useAuth() {
-    const [authed, setAuthed] = React.useState(false);
+export function useAuth() {
+    // const [authed, setAuth] = React.useState(false);
+
     return {
-        authed,
         login(username, password) {
-            return new Promise((res) => {
+            return new Promise((myResolve, myReject) => {
                 axios.post(LOGIN_USER_SVC, { username, password })
                     .then(res => {
-                        setAuthed(true);
+                        console.log("M HERE");
+                        myResolve(res);
                         res();
-                    }).catch(res => res)
-            })
+                    })
+                    .catch(err => {
+                        myReject(err);
+                    });
+            });
         },
+
         logout(userAuthToken) {
-            return new Promise((res) => {
+            return new Promise((myResolve, myReject) => {
                 fetch(LOGOUT_USER_SVC, {
                     method: 'POST',
                     headers: {
@@ -27,33 +31,23 @@ function useAuth() {
                         'accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
+                }).then(res => {
+                    myResolve(res);
+                    res();
                 })
-                    .then(res => {
-                        setAuthed(false);
-                        res();
-                    }).catch(res => res)
-            })
+                    .catch(err => {
+                        myReject(err);
+                    });
+            });
         }
     }
 }
 
-function RequireAuth({ children }) {
-    const { authed } = useAuth();
-    const location = useLocation();
-
-    return authed === true ? (
-        children
-    ) : (
-        <Navigate to="/login" replace state={{ path: location.pathname }} />
-    );
-}
-
 export function AuthProvider({ children }) {
     const auth = useAuth();
-
     return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
 export default function AuthConsumer() {
-    return React.useContext(authContext);
+    return React.useContext(authContext) || null;
 }

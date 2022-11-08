@@ -13,66 +13,79 @@ import MatchedPage from "./screens/MatchedPage";
 import Collab from "./screens/Tpage";
 import ChatPage from "./components/ChatPage";
 import ChatPage2 from "./components/ChatPage2";
-import { Box } from "@mui/material";
-import React from "react";
-import RequireAuth from "./useAuth";
+import { Box, fabClasses, useIsFocusVisible } from "@mui/material";
+import React, {
+  useEffect,
+} from "react";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userAuthToken: false
+    };
+  };
 
-function App() {
-  return (
-    <div className="App">
-      <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-        <Router>
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={<Navigate replace to="/signup" />}
-            ></Route>
-            {/* <Route path="/homepage" element={<Homepage/>}/> */}
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/account/settings" element={
-              <RequireAuth>
-                <AccountSettings />
-              </RequireAuth>
-            } />
-            <Route
-              path="/selectdifficulty"
-              element={
-                <RequireAuth>
+  componentDidMount() {
+    const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('userAuthed=')).split('=')[1];
+    if (userAuthToken == 'true') {
+      this.setState({
+        userAuthToken: true
+      })
+    } else {
+      this.setState({
+        userAuthToken: false
+      })
+    }
+    console.log("AUTH NOW = " + this.state.userAuthToken);
+  }
+  render() {
+    return (
+      <div className="App" >
+        <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+          <Router>
+            <Routes>
+              <Route
+                exact
+                path="/"
+                element={<Navigate replace to="/signup" />}
+              ></Route>
+              {/* <Route path="/homepage" element={<Homepage/>}/> */}
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              {this.state.userAuthed ? (
+                <Route path="/account/settings" element={
+                  <AccountSettings />
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/selectdifficulty" element={
                   <SelectDifficultyPage />
-                </RequireAuth>
-              } />
-            <Route path="/matching" element={
-              <RequireAuth>
-                <MatchingPage />
-              </RequireAuth>
-            } />
-            <Route path="/matched" element={
-              <RequireAuth >
-                <MatchedPage />
-              </RequireAuth>
-            } />
-            <Route path="/testpage" element={
-              <RequireAuth >
-                <Collab />
-              </RequireAuth>
-            } />
-            <Route path="/chatpage" element={
-              <RequireAuth >
-                <ChatPage />
-              </RequireAuth>
-            } />
-            <Route path="/chatpage2" element={
-              <RequireAuth >
-                <ChatPage2 />
-              </RequireAuth>
-            } />
-          </Routes>
-        </Router>
-      </Box>
-    </div>
-  );
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/matching" element={
+                  <MatchingPage />
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/matched" element={
+                  <MatchedPage />
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/testpage" element={
+                  <Collab />
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/chatpage" element={
+                  <ChatPage />
+                } />) : null}
+              {this.state.userAuthed ? (
+                <Route path="/chatpage2" element={
+                  <ChatPage2 />
+                } />) : null}
+            </Routes>
+          </Router>
+        </Box>
+      </div>
+    );
+  }
 }
 
 export default App;

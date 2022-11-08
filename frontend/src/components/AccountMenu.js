@@ -13,7 +13,6 @@ import {
   ListItemIcon,
   IconButton
 } from "@mui/material";
-import { LOGOUT_USER_SVC } from "../configs";
 import { STATUS_CODE_FAILED, STATUS_CODE_SUCCESS } from "../constants";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Settings from '@mui/icons-material/Settings';
@@ -31,21 +30,27 @@ export default function AccountMenu() {
   const [dialogMsg, setDialogMsg] = useState("")
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const navigate = useNavigate() // re-direct api
-  const { authed, logout } = useAuth();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
     logout(userAuthToken)
-      .then(res => {
-        if (res && res.status === STATUS_CODE_SUCCESS) {
-          setIsLogoutSuccess(true);
-          navigate("/");
-        } else if (res.status === STATUS_CODE_FAILED) {
-          setErrorDialog(res.data.message);
-        } else {
-          setErrorDialog('Please try again later')
+      .then(
+        function (res) {
+          if (res && res.status === STATUS_CODE_SUCCESS) {
+            setIsLogoutSuccess(true);
+            document.cookie = "userAuthed=" + 'false';
+            navigate("/");
+          }
+        },
+        function (error) {
+          if (error.status === STATUS_CODE_FAILED) {
+            setErrorDialog(error.message);
+          } else {
+            setErrorDialog('Please try again later')
+          }
         }
-      });
+      );
   }
 
   const closeDialog = () => setIsDialogOpen(false)
