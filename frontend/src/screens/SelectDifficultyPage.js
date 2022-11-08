@@ -28,44 +28,52 @@ export default function BasicSelect() {
   const [dialogMsg, setDialogMsg] = useState("")
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const redirect = useNavigate() // re-direct api
+  const [isValidUser, setIsValidUser] = React.useState(false);
+
+  React.useEffect(() => {
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      console.log("document cookie is not null");
+      console.log(JSON.stringify(document.cookie));
+      setIsValidUser(true);
+    }
+  }, []);
 
   const handleChange = (event) => {
     setDifficulty(event.target.value);
     console.log(event.target.value);
   };
-  const closeDialog = () => setIsDialogOpen(false)
-
-  const setErrorDialog = (msg) => {
-    setIsDialogOpen(true)
-    setDialogTitle('Error')
-    setDialogMsg(msg)
-  }
 
   const confirmButton = () => {
     navigate("/matching", { state : { difficulty: difficulty }});
   }
 
-  return (
-    <>
-    <TopNavBar  />
-      <h1 style={{marginBottom: 20, fontSize: 28}}>Select your difficulty: </h1>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={difficulty}
-            label="Difficulty"
-            onChange={handleChange}
-          >
-            <MenuItem value={"Easy"}>Easy</MenuItem>
-            <MenuItem value={"Medium"}>Medium</MenuItem>
-            <MenuItem value={"Difficult"}>Difficult</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Button onClick={confirmButton} style={{ width: 100, marginTop: 10 }}>Confirm</Button>
-    </>
-  );
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <>
+      <TopNavBar  />
+        <h1 style={{marginBottom: 20, fontSize: 28}}>Select your difficulty: </h1>
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={difficulty}
+              label="Difficulty"
+              onChange={handleChange}
+            >
+              <MenuItem value={"Easy"}>Easy</MenuItem>
+              <MenuItem value={"Medium"}>Medium</MenuItem>
+              <MenuItem value={"Difficult"}>Difficult</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Button onClick={confirmButton} style={{ width: 100, marginTop: 10 }}>Confirm</Button>
+      </>
+    );
+  }
 }

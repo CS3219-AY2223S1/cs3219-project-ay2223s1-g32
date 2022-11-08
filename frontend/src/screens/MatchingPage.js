@@ -14,8 +14,12 @@ export default function MatchingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [roomID, setRoomID] = React.useState(0);
-  const difficulty = location.state.difficulty;
-  const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const difficulty = location.state == null ? "" : location.state.difficulty;
+  
+  const username = (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
+                ? ""
+                : document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const [isValidUser, setIsValidUser] = React.useState(false);
 
   const socket = io("http://localhost:8001/", {
     autoConnect: false,
@@ -44,12 +48,15 @@ export default function MatchingPage() {
     console.log(response); // false
   });
 
-  React.useEffect(
-    () => () => {
+  React.useEffect(() =>
+    () => {
+      if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+        console.log("document cookie is not null");
+        console.log(JSON.stringify(document.cookie));
+        setIsValidUser(true);
+      }
       clearTimeout(timerRef.current);
-    },
-    []
-  );
+    },[]);
 
   const handleClickQuery = () => {
     console.log("username: " + username);
@@ -77,43 +84,49 @@ export default function MatchingPage() {
     }, 30000);
   };
 
-  return (
-    <>
-    <TopNavBar  />
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <Box sx={{ height: 40 }}>
-        {query === "success" ? (
-          <Typography>Success!</Typography>
-        ) : (
-          <Fade
-            in={query === "progress"}
-            style={{
-              transitionDelay: query === "progress" ? "800ms" : "0ms",
-            }}
-            unmountOnExit
-          >
-            <CircularProgress />
-          </Fade>
-        )}
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <>
+      <TopNavBar  />
+      <Box
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
+        <Box sx={{ height: 40 }}>
+          {query === "success" ? (
+            <Typography>Success!</Typography>
+          ) : (
+            <Fade
+              in={query === "progress"}
+              style={{
+                transitionDelay: query === "progress" ? "800ms" : "0ms",
+              }}
+              unmountOnExit
+            >
+              <CircularProgress />
+            </Fade>
+          )}
+        </Box>
+        <Button onClick={handleClickQuery} sx={{ m: 2 }}>
+          {query !== "idle" ? "Stop Matching" : "Start Matching"}
+        </Button>
+        <div>
+          <Box sx={{ height: 40 }}>
+            <Link to="/login">
+              <Button variant="outlined">Go Home</Button>
+            </Link>
+          </Box>
+          <Box sx={{ height: 40 }}>
+            <Link to="/selectdifficulty">
+              <Button variant="outlined">Change difficulty</Button>
+            </Link>
+          </Box>
+        </div>
       </Box>
-      <Button onClick={handleClickQuery} sx={{ m: 2 }}>
-        {query !== "idle" ? "Stop Matching" : "Start Matching"}
-      </Button>
-      <div>
-        <Box sx={{ height: 40 }}>
-          <Link to="/login">
-            <Button variant="outlined">Go Home</Button>
-          </Link>
-        </Box>
-        <Box sx={{ height: 40 }}>
-          <Link to="/selectdifficulty">
-            <Button variant="outlined">Change difficulty</Button>
-          </Link>
-        </Box>
-      </div>
-    </Box>
-    </>
-  );
+      </>
+    );
+  };
 }
