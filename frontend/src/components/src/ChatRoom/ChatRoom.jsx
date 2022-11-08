@@ -12,7 +12,7 @@ const SOCKET_SERVER_URL = "http://localhost:8008";
 
 const ChatRoom = (props) => {
   const username = props.username;
-  const { roomId } = props.roomid;
+  const roomId = props.roomid;
   const [peerusername, setPeerUsername] = useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = React.useState("");

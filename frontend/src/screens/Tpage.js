@@ -22,33 +22,39 @@ function Collab() {
     console.log("TPAGE", JSON.stringify(payload));
     setQuestion(payload.question);
   });
-  
+
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
   const difficulty = location.state.difficulty;
   const roomID = location.state.roomID;
-  const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
-  const userId = document.cookie.split('; ').find((row) => row.startsWith('userId=')).split('=')[1];
+  const username = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("username="))
+    .split("=")[1];
+  const userId = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("userId="))
+    .split("=")[1];
   const [EditorRef, setEditorRef] = React.useState(null);
   const [code, setCode] = React.useState("");
   React.useEffect(() => {
     socket.emit("room", { roomID: roomID });
     axios
-      .get(`http://localhost:8002/api/question/random/?difficulty=${difficulty}`)
+      .get(
+        `http://localhost:8002/api/question/random/?difficulty=${difficulty}`
+      )
       .then((resp) => {
-        const q = resp.data 
-        socket.emit("set question", { roomID, question: q })
+        const q = resp.data;
+        socket.emit("set question", { roomID, question: q });
       });
 
-
-      
     return () => {
       socket.emit("leave room", {
         roomID: roomID,
       });
     };
   }, []);
-  
+
   const handleEditorDidMount = (editor) => {
     setEditorRef(editor);
   };
@@ -58,7 +64,7 @@ function Collab() {
 
       let provider = null;
       try {
-        provider = new WebrtcProvider("Any Room Name", ydoc, {
+        provider = new WebrtcProvider(roomID.toString(), ydoc, {
           //Remember the other tab or
           //other user should be in same room for seeing real-time changes
           signaling: [
@@ -98,18 +104,18 @@ function Collab() {
 
   const onSubmitCode = () => {
     axios({
-      method: 'post',
-      url: 'http://localhost:8005/api/history/',
+      method: "post",
+      url: "http://localhost:8005/api/history/",
       data: {
         user: userId,
         collaborator: username, // to change
         question: question.name,
         content: code,
-      }
+      },
     }).then(() => {
       window.alert("Submitted successfully!");
     });
-  }
+  };
 
   return (
     <div>
@@ -118,7 +124,7 @@ function Collab() {
         {"Difficulty:"} {difficulty}
       </h1>
       <h2>{question.name}</h2>
-        <p>{question.content}</p>
+      <p>{question.content}</p>
       <div
         style={{
           display: "flex",
@@ -129,40 +135,40 @@ function Collab() {
           marginTop: "20px",
         }}
       >
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-        <CodeMirrorEditor
-          onChange={(editor, data, value) => {
-            setCode(value);
-          }}
-          autoScroll
-          options={{
-            mode: "text/x-c++src", //this is for c++,  you can visit https://github.com/atharmohammad/Code-N-Collab/blob/master/src/Function/languageMapper.js  for other language types
-            theme: "monokai",
-            lineWrapping: true,
-            smartIndent: true,
-            lineNumbers: true,
-            foldGutter: true,
-            tabSize: 2,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            autoCloseTags: true,
-            matchBrackets: true,
-            autoCloseBrackets: true,
-            extraKeys: {
-              "Ctrl-Space": "autocomplete",
-            },
-          }}
-          editorDidMount={(editor) => {
-            handleEditorDidMount(editor);
-            editor.setSize("60vw", "40vw");
-          }}
-        />
-        <ChatRoom roomid={roomID} username={username} />
+        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+          <CodeMirrorEditor
+            onChange={(editor, data, value) => {
+              setCode(value);
+            }}
+            autoScroll
+            options={{
+              mode: "text/x-c++src", //this is for c++,  you can visit https://github.com/atharmohammad/Code-N-Collab/blob/master/src/Function/languageMapper.js  for other language types
+              theme: "monokai",
+              lineWrapping: true,
+              smartIndent: true,
+              lineNumbers: true,
+              foldGutter: true,
+              tabSize: 2,
+              gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+              autoCloseTags: true,
+              matchBrackets: true,
+              autoCloseBrackets: true,
+              extraKeys: {
+                "Ctrl-Space": "autocomplete",
+              },
+            }}
+            editorDidMount={(editor) => {
+              handleEditorDidMount(editor);
+              editor.setSize("60vw", "40vw");
+            }}
+          />
+          <ChatRoom roomid={roomID} username={username} />
         </Box>
       </div>
-      <Box sx={{marginTop: "30px"}}>
-      <Button size="large" variant="contained" onClick={onSubmitCode}>
-        Submit
-      </Button>
+      <Box sx={{ marginTop: "30px" }}>
+        <Button size="large" variant="contained" onClick={onSubmitCode}>
+          Submit
+        </Button>
       </Box>
     </div>
   );
