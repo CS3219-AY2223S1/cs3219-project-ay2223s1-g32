@@ -9,7 +9,7 @@ function QuestionHistory() {
 		//   .get("http://localhost:8002/api/history/")
 		//   .then((resp) => setUserHistory(resp.data[1]));
 		axios
-		  .get("http://localhost:8005/api/history/")
+		  .get("http://localhost:8005/api/history/") //TODO: change to pull from particular userID
 		  .then((resp) => {
 				console.log("line 13" + JSON.stringify(resp.data));
 				setUserHistory(resp.data);
