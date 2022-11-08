@@ -40,6 +40,7 @@ function LoginPage() {
             // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
             document.cookie="authToken=" + res.data.token;
             document.cookie="username=" + res.data.username;
+            document.cookie="userId=" + res.data.id;
             setIsLoginSuccess(true)
             redirect("/selectdifficulty");
         }

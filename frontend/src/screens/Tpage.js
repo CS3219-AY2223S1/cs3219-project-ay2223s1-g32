@@ -27,6 +27,7 @@ function Collab() {
   const difficulty = location.state.difficulty;
   const roomID = location.state.roomID;
   const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const userId = document.cookie.split('; ').find((row) => row.startsWith('userId=')).split('=')[1];
   const [EditorRef, setEditorRef] = React.useState(null);
   const [code, setCode] = React.useState("");
   React.useEffect(() => {
@@ -93,7 +94,7 @@ function Collab() {
       method: 'post',
       url: 'http://localhost:8005/api/history/',
       data: {
-        user: username,
+        user: userId,
         collaborator: username, // to change
         question: question.name,
         content: code,
