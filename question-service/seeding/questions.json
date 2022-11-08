@@ -3,73 +3,73 @@
 		{
 			"name": "Two Sum",
 			"content": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
-			"difficulty": 0,
+			"difficulty": "Easy",
 			"topics": ["array"]
 		},
 		{
 			"name": "Remove Duplicates from Sorted Array",
 			"content": "Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once.\nThe relative order of the elements should be kept the same.",
-			"difficulty": 0,
+			"difficulty": "Easy",
 			"topics": ["array"]
 		},
 		{
 			"name": "Remove Element",
 			"content": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\nNotice that the solution set must not contain duplicate triplets.",
-			"difficulty": 1,
+			"difficulty": "Medium",
 			"topics": ["array"]
 		},
 		{
 			"name": "Find First and Last Position of Element in Sorted Array",
 			"content": "Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.\nIf target is not found in the array, return [-1, -1].\nYou must write an algorithm with O(log n) runtime complexity.",
-			"difficulty": 1,
+			"difficulty": "Medium",
 			"topics": ["array"]
 		},
 		{
 			"name": "Median of Two Sorted Arrays",
 			"content": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.\nThe overall run time complexity should be O(log (m+n)).",
-			"difficulty": 2,
+			"difficulty": "Hard",
 			"topics": ["array"]
 		},
 		{
 			"name": "First Missing Positive",
 			"content": "Given an unsorted integer array nums, return the smallest missing positive integer.\nYou must implement an algorithm that runs in O(n) time and uses constant extra space.",
-			"difficulty": 2,
+			"difficulty": "Hard",
 			"topics": ["array"]
 		},
 		{
 			"name": "First Letter to Appear Twice",
 			"content": "Given a string s consisting of lowercase English letters, return the first letter to appear twice.",
-			"difficulty": 0,
+			"difficulty": "Easy",
 			"topics": ["string"]
 		},
 		{
 			"name": "Shuffle String",
 			"content": "You are given a string s and an integer array indices of the same length.\nThe string s will be shuffled such that the character at the ith position moves to indices[i] in the shuffled string.\nReturn the shuffled string.",
-			"difficulty": 0,
+			"difficulty": "Easy",
 			"topics": ["string"]
 		},
 		{
 			"name": "Group Anagrams",
-			"content": "Given an array of strings strs, group the anagrams together.\nYou can return the answer in any order.\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
-			"difficulty": 1,
+			"content": "Given an array of strings strs, group the anagrams together.\nYou can return the answer in any order.\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phras2e, typically using all the original letters exactly once.",
+			"difficulty": "Medium",
 			"topics": ["string"]
 		},
 		{
 			"name": "Delete Operation for Two Strings",
 			"content": "Given two strings word1 and word2, return the minimum number of steps required to make word1 and word2 the same.\nIn one step, you can delete exactly one character in either string.",
-			"difficulty": 1,
+			"difficulty": "Medium",
 			"topics": ["string"]
 		},
 		{
 			"name": "Longest Valid Parentheses",
 			"content": "Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.",
-			"difficulty": 2,
+			"difficulty": "Hard",
 			"topics": ["string"]
 		},
 		{
 			"name": "Shortest Palindrome",
 			"content": "You are given a string s.\nYou can convert s to a palindrome by adding characters in front of it.\nReturn the shortest palindrome you can find by performing this transformation.",
-			"difficulty": 2,
+			"difficulty": "Hard",
 			"topics": ["string"]
 		}
 	]

@@ -34,7 +34,7 @@ function Collab() {
   React.useEffect(() => {
     socket.emit("room", { roomID: roomID });
     axios
-      .get("http://localhost:8002/api/question/random")
+      .get(`http://localhost:8002/api/question/random/?difficulty=${difficulty}`)
       .then((resp) => {
         const q = resp.data 
         socket.emit("set question", { roomID, question: q })
