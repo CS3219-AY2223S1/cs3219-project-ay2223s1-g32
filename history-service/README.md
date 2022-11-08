@@ -20,7 +20,7 @@ Request Parameters:
 | --- | ----------------------------- |
 | id  | ID of the history of interest |
 
-### **Get specified question: `GET /api/user/:userId`**
+### **Get history for specified user: `GET /api/user/:userId`**
 Returns all history records pertaining to the specified user.
 
 Request Parameters:
