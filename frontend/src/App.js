@@ -35,8 +35,6 @@ function App() {
             <Route path="/matching" element={<MatchingPage />} />
             <Route path="/matched" element={<MatchedPage />} />
             <Route path="/testpage" element={<Collab />} />
-            <Route path="/chatpage" element={<ChatPage />} />
-            <Route path="/chatpage2" element={<ChatPage2 />} />
           </Routes>
         </Router>
       </Box>

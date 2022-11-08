@@ -26,8 +26,12 @@ export default function MatchingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [roomID, setRoomID] = React.useState(0);
-  const difficulty = location.state.difficulty;
-  const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const difficulty = location.state == null ? "" : location.state.difficulty;
+
+  const username = (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
+    ? ""
+    : document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+  const [isValidUser, setIsValidUser] = React.useState(false);
 
   const socket = io("http://localhost:8001/", {
     autoConnect: false,
@@ -58,12 +62,18 @@ export default function MatchingPage() {
     setErrorDialog("Please try again, it took too long :(")
   });
 
-  React.useEffect(
-    () => () => {
+  React.useEffect(() =>
+    () => {
       clearTimeout(timerRef.current);
-    },
-    []
-  );
+    }, []);
+
+  React.useEffect(() => {
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      console.log("document cookie is not null");
+      console.log(JSON.stringify(document.cookie));
+      setIsValidUser(true);
+    }
+  }, []);
 
   const handleClickQuery = () => {
     console.log("username: " + username);
@@ -102,56 +112,61 @@ export default function MatchingPage() {
     setDialogMsg(msg)
   }
 
-
-  return (
-    <>
-      <TopNavBar />
-      <Components.TinyContainer>
-        <Box
-          sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-        >
-          <Box sx={{ height: 40 }}>
-            <Dialog
-              open={isDialogOpen}
-              onClose={closeDialog}
-            >
-              <DialogTitle>{dialogTitle}</DialogTitle>
-              <DialogContent>
-                <DialogContentText>{dialogMsg}</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={closeDialog}>Close</Button>
-              </DialogActions>
-            </Dialog>
-            {query === "success" ? (
-              <Typography>Success in finding you a coding comrade!</Typography>
-            ) :
-              query === "failed" ? (
-                <Typography>Failed this time in finding you a suitable comrade. Please try again!</Typography>
-              ) : (
-                <Fade
-                  in={query === "progress"}
-                  style={{
-                    transitionDelay: query === "progress" ? "800ms" : "0ms",
-                  }}
-                  unmountOnExit
-                >
-                  <CircularProgress />
-                </Fade>
-              )}
-          </Box>
-          <Components.MatchingButton onClick={handleClickQuery} sx={{ m: 2 }}>
-            {query == "progress" ? "Stop Matching" : query == "failed" ? "Try Again" : "Start Matching"}
-          </Components.MatchingButton>
-          <div>
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <>
+        <TopNavBar />
+        <Components.TinyContainer>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+          >
             <Box sx={{ height: 40 }}>
-              <Link to="/selectdifficulty">
-                <Components.MatchingGhostButton>Change difficulty</Components.MatchingGhostButton>
-              </Link>
+              <Dialog
+                open={isDialogOpen}
+                onClose={closeDialog}
+              >
+                <DialogTitle>{dialogTitle}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>{dialogMsg}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={closeDialog}>Close</Button>
+                </DialogActions>
+              </Dialog>
+              {query === "success" ? (
+                <Typography>Success in finding you a coding comrade!</Typography>
+              ) :
+                query === "failed" ? (
+                  <Typography>Failed this time in finding you a suitable comrade. Please try again!</Typography>
+                ) : (
+                  <Fade
+                    in={query === "progress"}
+                    style={{
+                      transitionDelay: query === "progress" ? "800ms" : "0ms",
+                    }}
+                    unmountOnExit
+                  >
+                    <CircularProgress />
+                  </Fade>
+                )}
             </Box>
-          </div>
-        </Box>
-      </Components.TinyContainer>
-    </>
-  );
+            <Components.MatchingButton onClick={handleClickQuery} sx={{ m: 2 }}>
+              {query == "progress" ? "Stop Matching" : query == "failed" ? "Try Again" : "Start Matching"}
+            </Components.MatchingButton>
+            <div>
+              <Box sx={{ height: 40 }}>
+                <Link to="/selectdifficulty">
+                  <Components.MatchingGhostButton>Change difficulty</Components.MatchingGhostButton>
+                </Link>
+              </Box>
+            </div>
+          </Box>
+        </Components.TinyContainer>
+      </>
+    );
+  };
 }

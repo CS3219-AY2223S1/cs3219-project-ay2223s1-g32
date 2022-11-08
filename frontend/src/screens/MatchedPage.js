@@ -13,8 +13,15 @@ import "../components/selectDifficulty/styles.css";
 export default function MatchedPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const difficulty = location.state.difficulty;
-  const roomID = location.state.roomID;
+  const difficulty = location.state == null ? "" : location.state.difficulty;
+  const roomID = location.state == null ? "" : location.state.roomID;
+  const [isValidUser, setIsValidUser] = React.useState(false);
+
+  React.useEffect(() => {
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      setIsValidUser(true);
+    }
+  }, []);
 
   const backButton = () => {
     navigate("/matching", { state: { difficulty: difficulty } });
@@ -24,21 +31,27 @@ export default function MatchedPage() {
     navigate("/testpage", { state: { difficulty: difficulty, roomID: roomID } });
   }
 
-  return (
-    <>
-      <TopNavBar />
-      <Components.CenterContainer>
-        <Components.MatchedTitle>Congratulations!</Components.MatchedTitle>
-        <Components.MatchedPara>You have been matched with a user.</Components.MatchedPara>
-        <Components.MatchedPara>Difficulty level: {difficulty}</Components.MatchedPara>
-        <Box sx={{
-          display: 'flex'
-        }}
-          flexDirection={"column"} justifyContent={'center'} alignSelf={'center'} >
-          <Components.MatchingGhostButton onClick={toTPage} >Start Coding</Components.MatchingGhostButton>
-          <Components.MatchingGhostButton onClick={backButton}>Go back</Components.MatchingGhostButton>
-        </Box>
-      </Components.CenterContainer>
-    </>
-  );
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <>
+        <TopNavBar />
+        <Components.CenterContainer>
+          <Components.MatchedTitle>Congratulations!</Components.MatchedTitle>
+          <Components.MatchedPara>You have been matched with a user.</Components.MatchedPara>
+          <Components.MatchedPara>Difficulty level: {difficulty}</Components.MatchedPara>
+          <Box sx={{
+            display: 'flex'
+          }}
+            flexDirection={"column"} justifyContent={'center'} alignSelf={'center'} >
+            <Components.MatchingGhostButton onClick={toTPage} >Start Coding</Components.MatchingGhostButton>
+            <Components.MatchingGhostButton onClick={backButton}>Go back</Components.MatchingGhostButton>
+          </Box>
+        </Components.CenterContainer>
+      </>
+    );
+  }
 }

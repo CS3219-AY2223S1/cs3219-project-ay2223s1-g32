@@ -4,7 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import TopNavBar from "../components/navBar/TopNavBar";
 import ChatRoom from "../components/src/ChatRoom/ChatRoom";
-import { Alert, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { CodemirrorBinding } from "y-codemirror";
 import { UnControlled as CodeMirrorEditor } from "react-codemirror2";
 import * as Y from "yjs";
@@ -25,16 +25,23 @@ function Collab() {
 
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
-  const difficulty = location.state.difficulty;
-  const roomID = location.state.roomID;
-  const username = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("username="))
-    .split("=")[1];
-  const userId = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("userId="))
-    .split("=")[1];
+  const [isValidUser, setIsValidUser] = React.useState(false);
+  const difficulty = location.state == null ? "" : location.state.difficulty;
+  const roomID = location.state == null ? "" : location.state.roomID;
+  const username =
+    (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
+      ? ""
+      : (document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("username="))
+        .split("=")[1]);
+  const userId =
+    (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
+      ? ""
+      : document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("userId="))
+        .split("=")[1];
   const [EditorRef, setEditorRef] = React.useState(null);
   const [code, setCode] = React.useState("");
   React.useEffect(() => {
@@ -47,6 +54,12 @@ function Collab() {
         const q = resp.data;
         socket.emit("set question", { roomID, question: q });
       });
+
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      console.log("document cookie is not null");
+      console.log(JSON.stringify(document.cookie));
+      setIsValidUser(true);
+    };
 
     return () => {
       socket.emit("leave room", {
@@ -117,60 +130,66 @@ function Collab() {
     });
   };
 
-  return (
-    <div>
-      <TopNavBar />
-      <h1>
-        {"Difficulty:"} {difficulty}
-      </h1>
-      <h2>{question.name}</h2>
-      <p>{question.content}</p>
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          width: "100%",
-          fontSize: "20px",
-          overflowY: "auto",
-          marginTop: "40px",
-        }}
-      >
-        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
-          <CodeMirrorEditor
-            onChange={(editor, data, value) => {
-              setCode(value);
-            }}
-            autoScroll
-            options={{
-              mode: "text/x-c++src", //this is for c++,  you can visit https://github.com/atharmohammad/Code-N-Collab/blob/master/src/Function/languageMapper.js  for other language types
-              theme: "monokai",
-              lineWrapping: true,
-              smartIndent: true,
-              lineNumbers: true,
-              foldGutter: true,
-              tabSize: 2,
-              gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-              autoCloseTags: true,
-              matchBrackets: true,
-              autoCloseBrackets: true,
-              extraKeys: {
-                "Ctrl-Space": "autocomplete",
-              },
-            }}
-            editorDidMount={(editor) => {
-              handleEditorDidMount(editor);
-              editor.setSize("60vw", "40vw");
-            }}
-          />
-          <ChatRoom roomid={roomID} username={username} />
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <div>
+        <TopNavBar />
+        <h1>
+          {"Difficulty:"} {difficulty}
+        </h1>
+        <h2>{question.name}</h2>
+        <p>{question.content}</p>
+        <div
+          style={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            fontSize: "20px",
+            overflowY: "auto",
+            marginTop: "20px",
+          }}
+        >
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+            <CodeMirrorEditor
+              onChange={(editor, data, value) => {
+                setCode(value);
+              }}
+              autoScroll
+              options={{
+                mode: "text/x-c++src", //this is for c++,  you can visit https://github.com/atharmohammad/Code-N-Collab/blob/master/src/Function/languageMapper.js  for other language types
+                theme: "monokai",
+                lineWrapping: true,
+                smartIndent: true,
+                lineNumbers: true,
+                foldGutter: true,
+                tabSize: 2,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                autoCloseTags: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                extraKeys: {
+                  "Ctrl-Space": "autocomplete",
+                },
+              }}
+              editorDidMount={(editor) => {
+                handleEditorDidMount(editor);
+                editor.setSize("60vw", "40vw");
+              }}
+            />
+            <ChatRoom roomid={roomID} username={username} />
+          </Box>
+        </div>
+        <Box sx={{ marginTop: "30px" }}>
+          <Button size="large" variant="contained" onClick={onSubmitCode}>
+            Submit
+          </Button>
         </Box>
       </div>
-      <Box sx={{ marginTop: "30px" }}>
-        <Button size="large" variant="contained" onClick={onSubmitCode}>
-          Submit
-        </Button>
-      </Box>
-    </div>
-  );
+    );
+  }
 }
 export default Collab;

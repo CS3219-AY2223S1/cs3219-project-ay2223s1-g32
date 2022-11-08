@@ -44,39 +44,54 @@ function a11yProps(index) {
 
 export default function AccountSettings() {
   const [value, setValue] = React.useState(0);
+  const [isValidUser, setIsValidUser] = React.useState(false);
+
+  React.useEffect(() => {
+    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
+      console.log("document cookie is not null");
+      console.log(JSON.stringify(document.cookie));
+      setIsValidUser(true);
+    }
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  return (
-    <>
-      <TopNavBar />
-      <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
-      >
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={value}
-          onChange={handleChange}
-          aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: 'divider' }}
+  if (!isValidUser) {
+    return (
+      <h1>Page not found</h1>
+    );
+  } else {
+    return (
+      <>
+        <TopNavBar />
+        <Box
+          sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
         >
-          <Tab label="Update/Change Password" {...a11yProps(0)} />
-          <Tab label="Delete Account" {...a11yProps(1)} />
-          <Tab label="Question History" {...a11yProps(2)} />
-        </Tabs>
-        <TabPanel value={value} index={0} >
-          <ChangePassword />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <DeleteAccount />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <QuestionHistory />
-        </TabPanel>
-      </Box>
-    </>
-  );
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            sx={{ borderRight: 1, borderColor: 'divider' }}
+          >
+            <Tab label="Update/Change Password" {...a11yProps(0)} />
+            <Tab label="Delete Account" {...a11yProps(1)} />
+            <Tab label="Question History" {...a11yProps(2)} />
+          </Tabs>
+          <TabPanel value={value} index={0} >
+            <ChangePassword />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <DeleteAccount />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <QuestionHistory />
+          </TabPanel>
+        </Box>
+      </>
+    );
+  }
 }
