@@ -121,7 +121,6 @@ function Collab() {
       url: "http://localhost:8005/api/history/",
       data: {
         user: userId,
-        collaborator: username, // to change
         question: question.name,
         content: code,
       },

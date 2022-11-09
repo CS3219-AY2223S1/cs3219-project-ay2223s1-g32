@@ -27,7 +27,6 @@ function UserAuthPage() {
     const [signIn, toggle] = React.useState(true);
 
     const navigate = useNavigate() // re-direct api
-    console.log("Hello world")
     const handleLogin = async (e) => {
         console.log("clicked");
         e.preventDefault();

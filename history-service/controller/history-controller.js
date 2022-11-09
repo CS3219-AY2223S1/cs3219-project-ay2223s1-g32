@@ -41,12 +41,12 @@ const getUserHistory = async (req, res, next) => {
 
 const createHistory = async (req, res, next) => {
   try {
-    const { user, collaborator, question, content } = req.body
-    if (!isValidHistory(user, collaborator, question, content)) {
-      return res.status(400).json({message: "History field(s) missing: please provide at least user, collaborator, and question"})
+    const { user, question, content } = req.body
+    if (!isValidHistory(user, question, content)) {
+      return res.status(400).json({message: "History field(s) missing: please provide at least user, and question"})
     }
 
-    const history = await HistoryRepository.createHistory(user, collaborator, question, content)
+    const history = await HistoryRepository.createHistory(user, question, content)
 
     return res.status(200).json(history)
 
@@ -80,8 +80,8 @@ const deleteUserHistory = async (req, res, next) => {
   }  
 }
 
-const isValidHistory = (user, collaborator, question, content) => {
-  return user && collaborator && question
+const isValidHistory = (user, question, content) => {
+  return user && question
 }
 
 module.exports = { 

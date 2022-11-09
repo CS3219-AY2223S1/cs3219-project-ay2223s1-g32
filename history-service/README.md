@@ -35,7 +35,6 @@ Request Body:
 | Key          | Description                                                      |
 | ------------ | ---------------------------------------------------------------- |
 | user         | ID of the user. Required field.                                  |
-| collaborator | Name of the user's collaborator. Required field.                 |
 | question     | Name of the attempted question. Required field.                  |
 | content      | Code content submitted for the question attempt. Optional field. |
 
