@@ -51,3 +51,4 @@ Program initialisation can be done either via Docker local deployment of manuall
 1. Install npm packages using `npm i --force`.
 2. Run the frontend using `npm i start`.
 3. Access the service via `http://localhost:3000`.
+Note for (2), if facing issues still, use `npm run start-force`.
