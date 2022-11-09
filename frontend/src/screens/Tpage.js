@@ -18,32 +18,32 @@ const socket = io("http://localhost:8001/", {
 });
 
 function Collab() {
-  socket.on("set question", (payload) => {
-    console.log("TPAGE", JSON.stringify(payload));
-    setQuestion(payload.question);
-  });
-
+  
   const [question, setQuestion] = React.useState("");
   const location = useLocation();
   const [isValidUser, setIsValidUser] = React.useState(false);
   const difficulty = location.state == null ? "" : location.state.difficulty;
   const roomID = location.state == null ? "" : location.state.roomID;
   const username =
+  (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
+  ? ""
+  : (document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("username="))
+    .split("=")[1]);
+    const userId =
     (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
-      ? ""
-      : (document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("username="))
-        .split("=")[1]);
-  const userId =
-    (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) == null)
-      ? ""
-      : document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("userId="))
-        .split("=")[1];
-  const [EditorRef, setEditorRef] = React.useState(null);
-  const [code, setCode] = React.useState("");
+    ? ""
+    : document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("userId="))
+    .split("=")[1];
+    const [EditorRef, setEditorRef] = React.useState(null);
+    const [code, setCode] = React.useState("");
+    socket.on("set question", (payload) => {
+      console.log("TPAGE", JSON.stringify(payload));
+      setQuestion(payload.question);
+    });
   React.useEffect(() => {
     socket.emit("room", { roomID: roomID });
     axios
