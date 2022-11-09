@@ -21,7 +21,6 @@ const io = new Server(httpServer, {
     credentials: true,
   },
 });
-var roomID = 1;
 
 app.get("/", (req, res) => {
   res.send("Hello World from matching-service");
@@ -44,16 +43,20 @@ io.on("connection", (socket) => {
 
     if (!userInQueue && matchedUser) {
       deleteMatch(matchedUser);
+      console.log("Matched User Socket id", matchedUser["socketId"])
+
       socket.emit(
         "SuccessMatched",
         "Match with same difficulty found.",
-        roomID
+        matchedUser["socketId"]
       );
       io.to(matchedUser["socketId"]).emit(
         "Success",
         "Match with same difficulty found.",
-        roomID
+        matchedUser["socketId"]
       );
+      socket.join(matchedUser["socketId"]);
+
       return;
     } else if (!userInQueue) {
       ormCreateMatchRequest(username, difficulty, socket.id);
@@ -65,9 +68,11 @@ io.on("connection", (socket) => {
           socket.emit(
             "SuccessMatched",
             "Match with same difficulty found.",
-            roomID
+            socket.id
           );
-          roomID++;
+          socket.join(socket.id);
+          console.log("Socket id", socket.id)
+
           clearInterval(interval);
         }
         count++;
@@ -80,5 +85,12 @@ io.on("connection", (socket) => {
     } else {
       socket.emit("Error", "User already in being matched.");
     }
+  });
+
+  socket.on("set question", function (data) {
+    console.log("set question", data);
+    socket.join(data.roomID);
+    console.log("socket rooms", socket.rooms)
+    io.sockets.in(data.roomID).emit("set question", data);
   });
 });

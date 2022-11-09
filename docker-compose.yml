@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - '8000:8000'
+  matching-service:
+    build: ./matching-service
+    ports:
+      - '8001:8001'
+  question-service:
+    build: ./question-service
+    ports:
+      - '8002:8002'
+  history-service:
+    build: ./history-service
+    ports:
+      - '8005:8005'
+  chatting-service:
+    build: ./chatting-service/server
+    ports:
+      - '8008:8008'
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
