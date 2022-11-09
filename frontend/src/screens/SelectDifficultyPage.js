@@ -18,7 +18,6 @@ export default function BasicSelect() {
   const [dialogTitle, setDialogTitle] = useState("")
   const [dialogMsg, setDialogMsg] = useState("")
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
-  const redirect = useNavigate() // re-direct api
   const [isValidUser, setIsValidUser] = React.useState(false);
 
   React.useEffect(() => {

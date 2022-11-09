@@ -26,18 +26,20 @@ function UserAuthPage() {
     const [signInMsg, setSignInMsg] = useState("Sign In");
     const [signIn, toggle] = React.useState(true);
 
-    const redirect = useNavigate() // re-direct api
+    const navigate = useNavigate() // re-direct api
 
     const handleLogin = async () => {
+        console.log("clicked");
         const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .then(res => {
+                console.log("res: " + JSON.stringify(res));
                 if (res && res.status === STATUS_CODE_SUCCESS) {
                     // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
                     document.cookie = "authToken=" + res.data.token;
                     document.cookie = "username=" + res.data.username;
                     document.cookie = "userId=" + res.data.id;
-                    setIsLoginSuccess(true)
-                    redirect("/selectdifficulty");
+                    setIsLoginSuccess(true);
+                    navigate("/selectdifficulty");
                 }
             }).catch((err) => {
                 if (err.response.status === STATUS_CODE_FAILED) {

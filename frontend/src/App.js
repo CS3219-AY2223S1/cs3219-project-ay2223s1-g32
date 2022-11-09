@@ -22,10 +22,9 @@ function App() {
         <Router>
           <Routes>
             <Route
-              exact
-              path="/"
-              element={<Navigate replace to="/register-login" />}
-            ></Route>
+              exact path="/"
+              element={<Navigate replace to="/register-login?" />}
+            />
             <Route path="/register-login" element={<UserAuthPage />} />
             <Route path="/account/settings" element={<AccountSettings />} />
             <Route

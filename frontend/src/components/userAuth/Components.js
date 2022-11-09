@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 // const show = keyframes`
 //   0%, 49.99% {
 // 		opacity: 0;
