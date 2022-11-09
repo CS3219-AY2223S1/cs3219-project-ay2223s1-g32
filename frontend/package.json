@@ -45,6 +45,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-force": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "npx eslint ."
