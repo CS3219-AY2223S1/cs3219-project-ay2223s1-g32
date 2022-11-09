@@ -6,10 +6,6 @@ let HistoryModelSchema = new Schema({
       type: String,
       required: true,
   },
-  collaborator: {
-    type: String,
-    required: true,
-  },
   question: {
       type: String,
       required: true,

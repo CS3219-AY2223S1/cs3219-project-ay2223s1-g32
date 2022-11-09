@@ -24,10 +24,9 @@ const getUserHistory = async (userId) => {
   return history
 }
 
-const createHistory = async (user, collaborator, question, content) => {
+const createHistory = async (user, question, content) => {
   const newHistory = await History.create({
     user,
-    collaborator,
     question,
     content
   })
