@@ -29,16 +29,17 @@ function UserAuthPage() {
     const navigate = useNavigate() // re-direct api
     console.log("Hello world")
     const handleLogin = async (e) => {
-      console.log("clicked");
-      e.preventDefault();
+        console.log("clicked");
+        e.preventDefault();
         const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .then(res => {
                 console.log("res: " + JSON.stringify(res));
                 if (res && res.status === STATUS_CODE_SUCCESS) {
                     // ref: https://stackoverflow.com/questions/29838539/how-to-store-access-token-value-in-javascript-cookie-and-pass-that-token-to-head
-                    document.cookie = "authToken=" + res.data.token;
-                    document.cookie = "username=" + res.data.username;
-                    document.cookie = "userId=" + res.data.id;
+                    document.cookie = "authToken=" + res.data.token + "; max-age=86400; path=/;";
+                    document.cookie = "username=" + res.data.username + "; max-age=86400; path=/;";
+                    document.cookie = "userId=" + res.data.id + "; max-age=86400; path=/;";
+                    document.cookie = "userAuthed=true; max-age=86400; path=/;";
                     setIsLoginSuccess(true);
                     console.log("Login success, navigating to /selectdifficulty")
                     navigate("/selectdifficulty");
@@ -53,8 +54,8 @@ function UserAuthPage() {
     }
 
     const handleSignup = async (e) => {
-      e.preventDefault();
-      console.log("Signing up")
+        e.preventDefault();
+        console.log("Signing up")
         setIsSignupSuccess(false)
         const res = await axios.post(URL_USER_SVC, { username, password })
             .catch((err) => {

@@ -68,8 +68,8 @@ export default function MatchingPage() {
     }, []);
 
   React.useEffect(() => {
-    if (document.cookie.split('; ').find((row) => row.startsWith('authToken=')) != null) {
-      console.log("document cookie is not null");
+    if (document.cookie.split('; ').find((row) => row.startsWith('userAuthed=')) != 'false') {
+      console.log("user authed is not false");
       console.log(JSON.stringify(document.cookie));
       setIsValidUser(true);
     }
