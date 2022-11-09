@@ -27,9 +27,10 @@ function UserAuthPage() {
     const [signIn, toggle] = React.useState(true);
 
     const navigate = useNavigate() // re-direct api
-
-    const handleLogin = async () => {
-        console.log("clicked");
+    console.log("Hello world")
+    const handleLogin = async (e) => {
+      console.log("clicked");
+      e.preventDefault();
         const res = await axios.post(LOGIN_USER_SVC, { username, password })
             .then(res => {
                 console.log("res: " + JSON.stringify(res));
@@ -39,6 +40,7 @@ function UserAuthPage() {
                     document.cookie = "username=" + res.data.username;
                     document.cookie = "userId=" + res.data.id;
                     setIsLoginSuccess(true);
+                    console.log("Login success, navigating to /selectdifficulty")
                     navigate("/selectdifficulty");
                 }
             }).catch((err) => {
@@ -50,7 +52,9 @@ function UserAuthPage() {
             })
     }
 
-    const handleSignup = async () => {
+    const handleSignup = async (e) => {
+      e.preventDefault();
+      console.log("Signing up")
         setIsSignupSuccess(false)
         const res = await axios.post(URL_USER_SVC, { username, password })
             .catch((err) => {
@@ -97,7 +101,7 @@ function UserAuthPage() {
                     <Components.Title>Create Account</Components.Title>
                     <Components.Input value={username} onChange={(e) => setUsername(e.target.value)} type="username" placeholder="username" />
                     <Components.Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" label="Password" />
-                    <Components.Button onClick={handleSignup}>Sign Up</Components.Button>
+                    <Components.Button onClick={e => handleSignup(e)}>Sign Up</Components.Button>
                 </Components.Form>
             </Components.SignUpContainer>
             <Components.SignInContainer signingIn={signIn}>
@@ -105,7 +109,7 @@ function UserAuthPage() {
                     <Components.Title>Sign in</Components.Title>
                     <Components.Input value={username} onChange={(e) => setUsername(e.target.value)} type="username" placeholder="username" />
                     <Components.Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" label="Password" />
-                    <Components.Button onClick={handleLogin}>Sign In</Components.Button>
+                    <Components.Button onClick={e => handleLogin(e)}>Sign In</Components.Button>
                 </Components.Form>
             </Components.SignInContainer>
             <Components.OverlayContainer signingIn={signIn}>
