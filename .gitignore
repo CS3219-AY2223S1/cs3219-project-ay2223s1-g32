@@ -1,0 +1,13 @@
+<<<<<<< HEAD
+chatting-service/client/node_modules/
+chatting-service/server/node_modules/.bin/nodemon
+chatting-service/server/node_modules/
+frontend/node_modules/
+matching-service/node_modules/@socket.io/component-emitter/index.d.ts
+matching-service/node_modules/
+=======
+matching-service/node_modules/
+frontend/node_modules/
+>>>>>>> 97c7db0f44bc18632338897b84defb5736db0247
+user-service/node_modules/
+node_modules/
