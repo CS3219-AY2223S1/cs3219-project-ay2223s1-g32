@@ -68,7 +68,7 @@ export default function BasicSelect() {
             >
               <MenuItem value={"Easy"}>Easy</MenuItem>
               <MenuItem value={"Medium"}>Medium</MenuItem>
-              <MenuItem value={"Difficult"}>Difficult</MenuItem>
+              <MenuItem value={"Hard"}>Hard</MenuItem>
             </Select>
           </FormControl>
         </Box>
