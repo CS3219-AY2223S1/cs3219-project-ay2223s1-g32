@@ -31,7 +31,8 @@ Program initialisation can be done either via Docker local deployment of manuall
 2. Create a Cloud DB URL using Mongo Atlas.
 3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
 4. Install npm packages using `npm i`.
-5. Run the service using `npm start`.
+5. Populate the question database with preset data using `npm run populate-db`
+6. Run the service using `npm start`.
 
 ### History Service
 1. Rename `.env.sample` file to `.env`.
