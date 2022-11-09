@@ -28,12 +28,13 @@ export default function ChangePassword() {
   const handlePasswordChange = async () => {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
     const username = document.cookie.split('; ').find((row) => row.startsWith('username=')).split('=')[1];
+    console.log(username, newPassword)
     const res = await fetch(URL_USER_SVC, {
       method: 'PUT',
-      data: {
+      body: JSON.stringify({
         username: username,
         newPassword: newPassword
-      },
+      }),
       headers: {
         'Authorization': `Bearer ${userAuthToken}`,
         'accept': 'application/json',
@@ -47,7 +48,8 @@ export default function ChangePassword() {
       }
     })
       .catch(err => {
-        if (err.response.status === STATUS_CODE_FAILED) {
+        console.log(err)
+        if (err.status === STATUS_CODE_FAILED) {
           setErrorDialog(err.response.data.message);
         } else {
           setErrorDialog('Please try again later')

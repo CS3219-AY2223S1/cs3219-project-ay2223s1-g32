@@ -24,8 +24,7 @@ export async function createUser(req, res) {
 export async function updateUserPassword(req, res) {
   try {
     const { username, newPassword } = req.body;
-    
-    const token = getRequestToken(req);
+    const token = getRequestToken(req?.headers?.authorization);
     const user = await getTokenUser(token);
     if (!user) {
       return res.status(400).json({message: `Invalid authorization token`});
@@ -50,7 +49,7 @@ export async function deleteUser(req, res) {
   try {
     const { username } = req.body;
     
-    const token = getRequestToken(req);
+    const token = getRequestToken(req?.headers?.authorization);
     const user = await getTokenUser(token);
     if (!user) {
       return res.status(400).json({message: `Invalid authorization token`});

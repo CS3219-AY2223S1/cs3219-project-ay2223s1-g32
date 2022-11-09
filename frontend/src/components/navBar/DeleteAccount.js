@@ -29,9 +29,9 @@ export default function DeleteAccount() {
     const userAuthToken = document.cookie.split('; ').find((row) => row.startsWith('authToken=')).split('=')[1];
     const res = await fetch(URL_USER_SVC, {
       method: 'DELETE',
-      data: {
+      body: JSON.stringify({
         username: username,
-      },
+      }),
       headers: {
         'Authorization': `Bearer ${userAuthToken}`,
         'accept': 'application/json',
@@ -44,7 +44,7 @@ export default function DeleteAccount() {
       }
     })
       .catch(err => {
-        if (err.response.status === STATUS_CODE_FAILED || 500) {
+        if (err.status === STATUS_CODE_FAILED || 500) {
           setErrorDialog("Error completing action");
         } else {
           setErrorDialog('Please try again later')
